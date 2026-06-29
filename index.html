@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Диагностика — Ordo Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f5f5f3;color:#1a1a18;min-height:100vh;padding:24px 16px 48px}
+.wrap{max-width:640px;margin:0 auto}
+
+/* LANG SWITCHER */
+.lang-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px}
+.lang-btn{font-size:20px;padding:4px 7px;border-radius:10px;border:1.5px solid #e0e0dc;color:#888;background:#fff;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;line-height:1.2}
+.lang-btn:hover{border-color:#7CC348;color:#3a7a1a}
+.lang-btn.active{background:#7CC348;border-color:#7CC348;color:#fff}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.logo{width:38px;height:38px;background:#7CC348;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:15px;font-weight:700}
+.logo-sub{font-size:11px;color:#999;margin-top:1px}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:20px}
+.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:#999;margin-bottom:5px}
+.prog-bar{height:4px;background:#e8e6e0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#7CC348;border-radius:2px;transition:width .4s ease}
+
+.card{background:#fff;border-radius:18px;padding:24px 20px;margin-bottom:14px}
+.screen{display:none}.screen.active{display:block}
+
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.09em;color:#7CC348;text-transform:uppercase;margin-bottom:8px}
+.h1{font-size:24px;font-weight:700;line-height:1.25;margin-bottom:10px}
+.h1 em{color:#7CC348;font-style:normal}
+.h2{font-size:17px;font-weight:600;margin-bottom:4px}
+.body-text{font-size:14px;color:#555;line-height:1.7;margin-bottom:18px}
+.intro-cta-note{font-size:13px;color:#3a7a1a;background:#f0f9e8;border-radius:10px;padding:12px 14px;margin-bottom:14px;line-height:1.65;border-left:3px solid #7CC348}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:20px}
+.stat{background:#f5f5f3;border-radius:10px;padding:11px;text-align:center}
+.stat-n{font-size:20px;font-weight:700;color:#7CC348}
+.stat-l{font-size:11px;color:#999;margin-top:2px}
+
+.btn-green{width:100%;background:#7CC348;color:#fff;border:none;border-radius:11px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .15s}
+.btn-green:hover{opacity:.88}
+
+/* FORM */
+.form-sub{font-size:13px;color:#888;margin-bottom:20px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:5px}
+.req{color:#E24B4A;margin-left:2px}
+.field input,.field select,.field textarea{width:100%;background:#f8f8f6;border:1.5px solid #e8e6e0;border-radius:10px;padding:11px 14px;font-size:14px;font-family:'Inter',sans-serif;color:#1a1a18;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#7CC348;background:#fff}
+.field textarea{resize:vertical;min-height:72px;line-height:1.6}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field input.err,.field select.err,.field textarea.err{border-color:#E24B4A;background:#fff8f8}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ab-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}
+.ab-card{background:#f8f8f6;border-radius:12px;padding:12px;border:1.5px solid #e8e6e0}
+.ab-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.ab-label.a{color:#E24B4A}.ab-label.b{color:#7CC348}
+.ab-card input,.ab-card select{width:100%;background:#fff;border:1.5px solid #e8e6e0;border-radius:8px;padding:9px 12px;font-size:13px;font-family:'Inter',sans-serif;color:#1a1a18;outline:none;margin-bottom:7px;transition:border-color .15s}
+.ab-card input:last-child{margin-bottom:0}
+.ab-card select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:26px}
+
+.sec-badges{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.sec-badge{font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;border:1.5px solid #e0e0dc;color:#999}
+.sec-badge.active{background:#7CC348;border-color:#7CC348;color:#fff}
+.sec-badge.done{border-color:#7CC348;color:#7CC348}
+
+.q-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.q-ico{width:40px;height:40px;background:#f0f9e8;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.q-title{font-size:16px;font-weight:700}
+.q-hint{font-size:12px;color:#888;margin-top:2px}
+.q-tip{font-size:12px;background:#f0f9e8;border-radius:8px;padding:8px 12px;color:#3a7a1a;margin-bottom:13px;line-height:1.55;border-left:3px solid #7CC348}
+
+.levels{display:flex;flex-direction:column;gap:6px}
+.lvl{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:#f8f8f6;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.lvl:hover{background:#fff;border-color:#d0d0cc}
+.lvl.sel{background:#fff;border-color:#7CC348}
+.lvl-n{font-size:12px;font-weight:700;color:#ccc;min-width:16px;padding-top:2px;flex-shrink:0}
+.lvl.sel .lvl-n{color:#7CC348}
+.lvl-body{flex:1}
+.lvl-t{font-size:13px;color:#444;line-height:1.5}
+.lvl.sel .lvl-t{color:#1a1a18}
+.lvl-ordo{font-size:11px;color:#7CC348;margin-top:4px;font-weight:600;display:none}
+.lvl.sel .lvl-ordo{display:block}
+.lvl-ordo:empty{display:none}
+
+.na-opt{display:flex;align-items:center;gap:10px;padding:10px 13px;background:#f8f8f6;border-radius:10px;cursor:pointer;border:2px solid transparent;margin-top:5px;transition:all .15s}
+.na-opt:hover{background:#fff;border-color:#d0d0cc}
+.na-opt.sel{background:#fafafa;border-color:#ccc}
+.na-t{font-size:13px;color:#999}
+
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid #f0f0ec}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:1.5px solid #e0e0dc;border-radius:8px;padding:9px 15px;font-size:13px;font-weight:500;cursor:pointer;color:#666;font-family:'Inter',sans-serif;transition:background .15s}
+.btn-back:hover{background:#f5f5f3}
+.btn-back:disabled{opacity:.3;cursor:not-allowed}
+.btn-next{display:inline-flex;align-items:center;gap:6px;background:#7CC348;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;color:#fff;font-family:'Inter',sans-serif;transition:opacity .15s}
+.btn-next:hover{opacity:.88}
+.step-lbl{font-size:12px;color:#bbb}
+
+/* RESULT */
+.r-title{font-size:21px;font-weight:700;margin-bottom:4px}
+.r-avg{font-size:13px;color:#888;margin-bottom:10px}
+.r-meta{font-size:13px;color:#444;padding:11px 13px;background:#f8f8f6;border-radius:10px;line-height:1.75;margin-bottom:16px}
+.radar-box{display:flex;justify-content:center;margin-bottom:20px}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:.07em;color:#999;text-transform:uppercase;margin-bottom:9px}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;margin-bottom:7px}
+.sc-row{display:flex;align-items:center;gap:8px;padding:9px 11px;background:#f8f8f6;border-radius:10px}
+.sc-ico{font-size:14px;width:24px;text-align:center;flex-shrink:0}
+.sc-name{font-size:12px;color:#666;flex:1}
+.sc-val{font-size:14px;font-weight:700}
+.sc-val.l1{color:#E24B4A}.sc-val.l2{color:#EF9F27}.sc-val.l3{color:#4CAF50}
+.sc-val.na{color:#ccc;font-size:11px;font-weight:400}
+.divider{border:none;border-top:1px solid #f0f0ec;margin:16px 0}
+.bn{background:#fff5f5;border-radius:12px;padding:14px;margin-bottom:14px;border-left:4px solid #E24B4A}
+.bn-lbl{font-size:10px;font-weight:700;color:#E24B4A;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.bn-name{font-size:15px;font-weight:700;margin-bottom:3px}
+.bn-why{font-size:13px;color:#666;margin-bottom:9px}
+.bn-sol{font-size:12px;color:#3a7a1a;background:#f0f9e8;border-radius:8px;padding:8px 12px;line-height:1.6}
+.tasks-block{margin-bottom:16px}
+.tasks-t{font-size:13px;font-weight:700;margin-bottom:9px}
+.t-row{display:flex;gap:8px;font-size:13px;padding:8px 0;border-bottom:1px solid #f0f0ec;line-height:1.55}
+.t-row:last-child{border-bottom:none}
+.t-i{font-size:11px;font-weight:700;color:#bbb;min-width:20px;padding-top:2px;flex-shrink:0}
+.ordo-solve{background:#f0f9e8;border-radius:12px;padding:16px;margin-bottom:14px}
+.ordo-solve-title{font-size:14px;font-weight:700;color:#2a5a0a;margin-bottom:11px}
+.ordo-feat-list{display:flex;flex-direction:column;gap:6px}
+.ordo-feat{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#2a5a0a;line-height:1.5}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+.feat{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f5f5f3;border-radius:10px;font-size:13px;color:#333}
+.feat.feat-hot{background:#f0f9e8;border:1.5px solid #c8e8a8;color:#2a5a0a;font-weight:500}
+.feat-badge{display:inline-block;font-size:10px;font-weight:700;background:#7CC348;color:#fff;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:middle}
+.feat-ico{font-size:15px;flex-shrink:0}
+.cab-list{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}
+.cab{font-size:12px;font-weight:500;padding:4px 11px;border-radius:20px;background:#f0f9e8;color:#3a7a1a;border:1px solid #c8e8a8}
+.cab.highlight{background:#7CC348;color:#fff;border-color:#7CC348}
+.quote-box{background:#f0f9e8;border-radius:11px;padding:14px 16px;border-left:4px solid #7CC348;margin-top:14px}
+.quote-text{font-size:13px;color:#2a5a0a;line-height:1.7;font-weight:500}
+.cta-block{background:#7CC348;border-radius:14px;padding:20px;text-align:center}
+.cta-t{font-size:17px;font-weight:700;color:#fff;margin-bottom:5px}
+.cta-s{font-size:13px;color:rgba(255,255,255,.85);margin-bottom:16px;line-height:1.6}
+.cta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn-white{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#3a7a1a;border:none;border-radius:9px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-white:hover{opacity:.92}
+.btn-wout{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.5);border-radius:9px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.cta-fine{font-size:11px;color:rgba(255,255,255,.6);margin-top:11px}
+.q-instruction{font-size:12px;font-weight:600;color:#7CC348;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.q-instruction::before{content:'';display:inline-block;width:3px;height:14px;background:#7CC348;border-radius:2px;flex-shrink:0}
+.solution-card{background:#f8f8f6;border-radius:12px;padding:14px;margin-bottom:10px;border-left:3px solid #e0e0dc}
+.solution-card:last-child{margin-bottom:0}
+.sol-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sol-ico{font-size:16px;flex-shrink:0}
+.sol-name{font-size:14px;font-weight:600;flex:1;color:#1a1a18}
+.sol-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.sol-red{background:#fde8e8;color:#c0392b;border:1px solid #f5c6c6}
+.sol-orange{background:#fef3e2;color:#d35400;border:1px solid #f9d5a0}
+.sol-yellow{background:#fef9e7;color:#8a7000;border:1px solid #f5e99a}
+.sol-ok{background:#eafaf1;color:#1e8449;border:1px solid #a9dfbf}
+.sol-ordo{font-size:13px;color:#2a5a0a;background:#f0f9e8;border-radius:8px;padding:8px 12px;margin-bottom:8px;font-weight:500;line-height:1.5}
+.sol-steps{display:flex;flex-direction:column;gap:4px}
+.sol-step{display:flex;gap:8px;font-size:12px;color:#555;padding:4px 0;border-bottom:0.5px solid #efefed;line-height:1.5}
+.sol-step:last-child{border-bottom:none;padding-bottom:0}
+.sol-num{font-size:10px;font-weight:700;color:#bbb;min-width:16px;padding-top:2px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LANG BAR -->
+<div class="lang-bar" id="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ru')" title="Русский">🇷🇺</button>
+  <button class="lang-btn" onclick="setLang('kz')" title="Қазақша">🇰🇿</button>
+  <button class="lang-btn" onclick="setLang('uz')" title="O'zbek">🇺🇿</button>
+  <button class="lang-btn" onclick="setLang('kg')" title="Кыргызча">🇰🇬</button>
+  <button class="lang-btn" onclick="setLang('tj')" title="Тоҷикӣ">🇹🇯</button>
+  <button class="lang-btn" onclick="setLang('en')" title="English">🇬🇧</button>
+  <button class="lang-btn" onclick="setLang('ms')" title="Bahasa Melayu">🇲🇾</button>
+</div>
+
+<div class="top-bar">
+  <div class="logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+  </div>
+  <div>
+    <div class="logo-text">Ordo Education</div>
+    <div class="logo-sub">ordo.education</div>
+  </div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-meta"><span id="prog-label">—</span><span id="prog-pct">0%</span></div>
+  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<!-- INTRO -->
+<div class="screen active card" id="s-intro">
+  <div class="eyebrow" id="i-eyebrow"></div>
+  <div class="h1" id="i-h1"></div>
+  <div class="body-text" id="i-sub"></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-n">12</div><div class="stat-l" id="i-s1"></div></div>
+    <div class="stat"><div class="stat-n">15</div><div class="stat-l" id="i-s2"></div></div>
+    <div class="stat"><div class="stat-n">5</div><div class="stat-l" id="i-s3"></div></div>
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l" id="i-s4"></div></div>
+  </div>
+  <div class="intro-cta-note" id="i-note"></div>
+  <button class="btn-green" id="i-btn" onclick="goToForm()"></button>
+</div>
+
+<!-- FORM -->
+<div class="screen card" id="s-form">
+  <div class="h2" id="f-title"></div>
+  <div class="form-sub" id="f-sub"></div>
+
+  <div class="field-row">
+    <div class="field"><label id="fl-name"></label><input type="text" id="f-name" /></div>
+    <div class="field"><label id="fl-role"></label>
+      <select id="f-role"><option value=""></option></select>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field"><label id="fl-email"></label><input type="email" id="f-email" /></div>
+    <div class="field"><label id="fl-telegram"></label><input type="text" id="f-telegram" placeholder="@username" /></div>
+  </div>
+  <div class="field-row">
+    <div class="field"><label id="fl-phone"></label><input type="tel" id="f-phone" placeholder="+7 777 000 00 00" /></div>
+    <div class="field"><label id="fl-whatsapp"></label><input type="tel" id="f-whatsapp" placeholder="+7 777 000 00 00" /></div>
+  </div>
+  <div class="field-row">
+    <div class="field"><label id="fl-center"></label><input type="text" id="f-center" /></div>
+    <div class="field"><label id="fl-city"></label><input type="text" id="f-city" /></div>
+  </div>
+  <div class="field-row">
+    <div class="field"><label id="fl-type"></label>
+      <select id="f-type"><option value=""></option></select>
+    </div>
+    <div class="field"><label id="fl-kids"></label><input type="number" id="f-kids" min="0" /></div>
+  </div>
+
+  <div class="ab-row">
+    <div class="ab-card">
+      <div class="ab-label a" id="ab-a-lbl"></div>
+      <select id="f-rev-a"><option value=""></option></select>
+      <input type="number" id="f-kids-a" min="0" />
+    </div>
+    <div class="ab-card">
+      <div class="ab-label b" id="ab-b-lbl"></div>
+      <select id="f-rev-b"><option value=""></option></select>
+      <input type="number" id="f-kids-b" min="0" />
+    </div>
+  </div>
+
+  <div class="field"><label id="fl-problems"></label><textarea id="f-problems"></textarea></div>
+  <div class="field"><label id="fl-help"></label><textarea id="f-help"></textarea></div>
+  <div class="field"><label id="fl-source"></label>
+    <select id="f-source"><option value=""></option></select>
+  </div>
+
+  <div class="nav" style="margin-top:8px">
+    <button class="btn-back" id="fb-back" onclick="show('s-intro');setProg(0,'—')"></button>
+    <span></span>
+    <button class="btn-next" id="fb-next" onclick="submitForm()"></button>
+  </div>
+</div>
+
+<!-- QUESTION -->
+<div class="screen card" id="s-q">
+  <div class="sec-badges" id="sec-badges"></div>
+  <div class="q-instruction" id="q-instruction"></div>
+  <div class="q-head">
+    <div class="q-ico" id="q-ico"></div>
+    <div><div class="q-title" id="q-title"></div><div class="q-hint" id="q-hint"></div></div>
+  </div>
+  <div class="levels" id="lvls"></div>
+  <div class="q-tip" id="q-tip" style="display:none;margin-top:12px"></div>
+  <div class="nav">
+    <button class="btn-back" id="btn-back" onclick="goBack()"></button>
+    <span class="step-lbl" id="step-lbl"></span>
+    <button class="btn-next" id="btn-next" onclick="goNext()"></button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="s-result">
+  <div class="card">
+    <div class="r-title" id="r-title"></div>
+    <div class="r-avg" id="r-avg"></div>
+    <div class="r-meta" id="r-meta"></div>
+    <div class="radar-box"><svg id="radar" width="260" height="270" viewBox="0 0 260 270"></svg></div>
+    <div class="sec-label" id="rl-biz"></div>
+    <div class="scores" id="sg-biz"></div>
+    <div class="divider"></div>
+    <div class="sec-label" id="rl-roles"></div>
+    <div class="scores" id="sg-roles"></div>
+  </div>
+  <div class="card">
+    <div class="bn" id="bn"></div>
+    <div class="tasks-block" id="tasks-wrap"></div>
+  </div>
+  <div class="card">
+    <div class="ordo-solve" id="ordo-solve"></div>
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid #f0f0ec">
+      <div class="sec-label" id="rl-feats"></div>
+      <div class="feat-grid" id="feat-grid-result"></div>
+    </div>
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid #f0f0ec">
+      <div class="sec-label" id="rl-cabs"></div>
+      <div class="cab-list" id="cab-list-result"></div>
+      <div class="quote-box"><div class="quote-text" id="r-quote"></div></div>
+    </div>
+  </div>
+  <div class="card cta-block">
+    <div class="cta-t" id="cta-t"></div>
+    <div class="cta-s" id="cta-s"></div>
+    <div class="cta-btns">
+      <button class="btn-white" onclick="window.open('https://calmaestro.com/founder/member','_blank')" id="cta-btn1"></button>
+      <button class="btn-white" style="background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.4)" onclick="window.open('https://ordo.education','_blank')" id="cta-btn2"></button>
+      <button class="btn-wout" id="bcopy" onclick="copyResult()"></button>
+    </div>
+    <div class="cta-fine">ordo.education · 3 <span id="cta-fine-days"></span></div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+<script>
+// ─── НАСТРОЙКИ — заполните свои данные ──────
+const TG_BOT_TOKEN='ВСТАВЬТЕ_НОВЫЙ_BOT_TOKEN';   // получите новый у @BotFather
+const TG_CHAT_ID='ВСТАВЬТЕ_CHAT_ID';              // ваш Telegram ID или ID группы
+const B24_WEBHOOK='ВСТАВЬТЕ_BITRIX24_WEBHOOK';    // из настроек Битрикс24
+const SP_API_KEY='ВСТАВЬТЕ_SENDPULSE_API_KEY';    // SendPulse → API → ключ
+const SP_API_SECRET='ВСТАВЬТЕ_SENDPULSE_SECRET';  // SendPulse → API → секрет
+const SP_FROM_EMAIL='noreply@ordo.education';      // от кого письмо
+const SP_FROM_NAME='Ordo Education';               // имя отправителя
+const DEMO_PROMO='AUDIT3';                         // промокод для демо-доступа
+const DEMO_URL='https://ordo.education';
+const GOOGLE_SHEET_URL='https://script.google.com/macros/s/AKfycbwOzCuVKg5pdVZUr6beFYqpvSxfWzgnso02ON1gUljqn31OnhQ8vaTQmgB00scx0wKdYA/exec'; // Google Apps Script URL
+           // ссылка на платформу
+// ─────────────────────────────────────────────
+
+// ─── TRANSLATIONS ─────────────────────────────
+const T={
+  ru:{
+    langName:'Русский',
+    iEyebrow:'Бесплатная диагностика',
+    iH1:'Узнайте, что <em>мешает расти</em> вашей организации',
+    iSub:'Пройдите самооценку за 12–15 минут. Получите объективную картину и бесплатный демо-доступ на 3 дня.',
+    iS1:'блоков',iS2:'минут',iS3:'уровней',iS4:'дня демо',
+    iBtn:'Пройти диагностику — это бесплатно →',
+    fTitle:'О вас и вашем центре',
+    fSub:'Заполните до диагностики — консультант изучит перед встречей',
+    qInstruction:'Оцени, на каком ты уровне',
+    flName:'ФИО',flRole:'Должность',flEmail:'Email',flTelegram:'Telegram',flPhone:'Телефон',flWhatsapp:'WhatsApp',flCenter:'Название центра',flCity:'Город',
+    flType:'Тип организации',flKids:'Детей сейчас',
+    flProblems:'Топ-3 проблемы прямо сейчас',flHelp:'Какую помощь хотите получить?',
+    flSource:'Откуда узнали об Ordo?',
+    abA:'📍 Точка А — сейчас',abB:'🎯 Точка Б — через 6 мес.',
+    revenueNow:'Оборот сейчас',revenueGoal:'Желаемый оборот',
+    kidsNow:'Детей сейчас',kidsGoal:'Желаемое кол-во детей',
+    roles:['Директор / Владелец','Управляющий','Партнёр','Другое'],
+    types:['Детский садик (полный день)','Мини-садик (неполный день)','Развивающий центр','Кружки / секции','Несколько форматов'],
+    revRangesNow:['до 500 000 ₸','500 000 – 1 500 000 ₸','1 500 000 – 3 000 000 ₸','3 000 000 – 6 000 000 ₸','более 6 000 000 ₸'],
+    revRangesGoal:['до 1 500 000 ₸','1 500 000 – 3 000 000 ₸','3 000 000 – 6 000 000 ₸','6 000 000 – 10 000 000 ₸','более 10 000 000 ₸'],
+    sources:['Instagram Айды (@aidabintazamat)','Instagram Ordo Education','YouTube','Telegram','По рекомендации коллеги','2GIS / Google','Был(а) на мероприятии','Другое'],
+    fbBack:'← Назад',fbNext:'Перейти к диагностике →',
+    btnBack:'← Назад',btnNext:'Далее →',btnRoles:'Перейти к ролям →',btnResult:'Показать результат →',
+    secBiz:'Бизнес',secRoles:'Роли сотрудников',
+    stepOf:'из',
+    rTitle:'Результат диагностики',
+    rAvgPre:'Средний уровень:',rAvgSuf:'из 5',
+    rlBiz:'Бизнес-процессы',rlRoles:'Роли сотрудников',
+    rlFeats:'Что даёт платформа — по вашим проблемам',
+    rlCabs:'12 AI-кабинетов — один для каждого сотрудника',
+    bnLbl:'Ключевое ограничение',
+    bnWhy:'Это слабейший бизнес-процесс. Его устранение разблокирует рост.',
+    bnSolPre:'Как Ordo решает:',
+    solveTitle:'🚀 Как Ordo Education решает именно ваши проблемы',
+    tasksTitle:'Что делать и как Ordo помогает',
+    roleTasksTitle:'Срочно по роли —',
+    quote:'«Кабинет директора собирает аналитику со всех отделов в единый дашборд — финансы, продажи, заполняемость, персонал — в реальном времени. Без ручных таблиц.»',
+    ctaT:'Получите бесплатный доступ на 3 дня',
+    ctaS:'Консультант уже видит ваш результат.\nПопробуйте платформу — без оплаты, без обязательств.',
+    ctaBtn1:'🚀 Попробовать бесплатно',ctaCopy:'📋 Скопировать результат',ctaCopied:'✓ Скопировано',
+    ctaFineDays:'дня бесплатного доступа',
+    introNote:'📋 Заполни анкету и пройди диагностику — я изучу твои результаты и подготовлюсь к нашему созвону. После диагностики получишь письмо с разбором.',
+    ctaBtn2:'🎁 Попробовать Ordo бесплатно',
+    ctaT:'Отлично! Результат готов 🎉',
+    ctaS:'Запишись на разбор с Айдой — она уже видит твои результаты и подготовится к встрече.',
+    ctaBtn1:'📅 Записаться на созвон с Айдой Азаматкызы',
+    naLabel:['В центре нет педагогов','Повар не предусмотрен','Няня не предусмотрена'],
+    naSkip:'— пропустить этот блок',
+    notApplicable:'не применимо',
+    pointA:'Точка А (сейчас)',pointB:'Точка Б (цель)',
+    kids:'детей',source:'Источник',
+    bizScores:'БИЗНЕС-ПРОЦЕССЫ',roleScores:'РОЛИ СОТРУДНИКОВ',
+    keyLimit:'КЛЮЧЕВОЕ ОГРАНИЧЕНИЕ',firstSteps:'ПЕРВЫЕ ШАГИ',
+    demo:'Демо-доступ',
+    featHot:'↑ для вас',
+    featNames:['Управление питанием','Геймификация обучения','Управление финансами','Электронный дневник','Анализ развития ребёнка','Коммуникация с родителями','Электронный документооборот','12 AI-кабинетов'],
+    cabNames:['Директор AI','Финансы AI','Продажи AI','HR AI','Методист AI','Медицинский кабинет','Кабинет родителя','Воспитатель AI','Няня AI','Повар AI','Заведующая AI','Администратор AI'],
+  },
+  kz:{
+    langName:'Қазақша',
+    iEyebrow:'Тегін диагностика',
+    iH1:'Ұйымыңыздың <em>өсуіне не кедергі</em> екенін біліңіз',
+    iSub:'12–15 минутта өзін-өзі бағалаудан өтіңіз. Нақты сурет пен 3 күндік тегін демо-қол жеткізу алыңыз.',
+    iS1:'блок',iS2:'минут',iS3:'деңгей',iS4:'күн демо',
+    iBtn:'Диагностикадан өту — бұл тегін →',
+    fTitle:'Сіз және орталығыңыз туралы',
+    fSub:'Диагностикаға дейін толтырыңыз — кеңесші кездесуден бұрын оқиды',
+    qInstruction:'Өзіңнің деңгейіңді бағала',
+    flName:'Аты-жөні',flRole:'Лауазымы',flEmail:'Email',flTelegram:'Telegram',flCenter:'Орталық атауы',flCity:'Қала',
+    flType:'Ұйым түрі',flKids:'Қазіргі балалар саны',
+    flProblems:'Қазіргі үш негізгі мәселе',flHelp:'Қандай көмек алғыңыз келеді?',
+    flSource:'Ordo туралы қайдан білдіңіз?',
+    abA:'📍 А нүктесі — қазір',abB:'🎯 Б нүктесі — 6 айдан кейін',
+    revenueNow:'Қазіргі айналым',revenueGoal:'Мақсатты айналым',
+    kidsNow:'Қазіргі балалар',kidsGoal:'Мақсатты балалар саны',
+    roles:['Директор / Иесі','Басқарушы','Серіктес','Басқа'],
+    types:['Балабақша (күні бойы)','Мини-балабақша (жарты күн)','Дамыту орталығы','Үйірмелер / секциялар','Бірнеше формат'],
+    revRangesNow:['500 000 ₸-ға дейін','500 000 – 1 500 000 ₸','1 500 000 – 3 000 000 ₸','3 000 000 – 6 000 000 ₸','6 000 000 ₸-тан жоғары'],
+    revRangesGoal:['1 500 000 ₸-ға дейін','1 500 000 – 3 000 000 ₸','3 000 000 – 6 000 000 ₸','6 000 000 – 10 000 000 ₸','10 000 000 ₸-тан жоғары'],
+    sources:['Айданың Instagram-ы (@aidabintazamat)','Ordo Education Instagram','YouTube','Telegram','Әріптестің ұсынысы бойынша','2GIS / Google','Іс-шарада болдым','Басқа'],
+    fbBack:'← Артқа',fbNext:'Диагностикаға өту →',
+    btnBack:'← Артқа',btnNext:'Келесі →',btnRoles:'Рөлдерге өту →',btnResult:'Нәтижені көрсету →',
+    secBiz:'Бизнес',secRoles:'Қызметкер рөлдері',
+    stepOf:'/',
+    rTitle:'Диагностика нәтижесі',
+    rAvgPre:'Орташа деңгей:',rAvgSuf:'/ 5',
+    rlBiz:'Бизнес-процестер',rlRoles:'Қызметкер рөлдері',
+    rlFeats:'Платформа не береді — сіздің мәселелеріңіз бойынша',
+    rlCabs:'12 AI-кабинет — әр қызметкерге арналған',
+    bnLbl:'Негізгі шектеу',
+    bnWhy:'Бұл ең әлсіз бизнес-процесс. Оны жою өсімді қозғайды.',
+    bnSolPre:'Ordo қалай шешеді:',
+    solveTitle:'🚀 Ordo Education дәл сіздің мәселелеріңізді қалай шешеді',
+    tasksTitle:'Не істеу керек және Ordo қалай көмектеседі',
+    roleTasksTitle:'Рөл бойынша шұғыл —',
+    quote:'«Директор кабинеті барлық бөлімдердің аналитикасын бір дашбордқа жинайды — қаржы, сату, толықтылық, персонал — нақты уақытта. Қолмен кесте жоқ.»',
+    ctaT:'3 күнге тегін қол жеткізу алыңыз',
+    ctaS:'Кеңесші нәтижеңізді көріп отыр.\nПлатформаны сынап көріңіз — төлемсіз, міндеттемесіз.',
+    ctaBtn1:'🚀 Тегін байқап көру',ctaCopy:'📋 Нәтижені көшіру',ctaCopied:'✓ Көшірілді',
+    ctaFineDays:'күн тегін қол жеткізу',
+    introNote:'📋 Анкетаны толтыр және диагностикадан өт — нәтижелеріңді зерттеп, созвонымызға дайындаламын.',
+    ctaBtn2:'🎁 Ordo тегін',
+    ctaT:'Тамаша! Нәтиже дайын 🎉',
+    ctaS:'Айдамен талдауға жазыл — ол нәтижелеріңді көріп, кездесуге дайындалады.',
+    ctaBtn1:'📅 Айдамен созвонға жазылу',
+    naLabel:['Орталықта педагог жоқ','Аспаз қарастырылмаған','Бала күтуші қарастырылмаған'],
+    naSkip:'— бұл блокты өткізу',
+    notApplicable:'қолданылмайды',
+    pointA:'А нүктесі (қазір)',pointB:'Б нүктесі (мақсат)',
+    kids:'бала',source:'Қайдан білді',
+    bizScores:'БИЗНЕС-ПРОЦЕСТЕР',roleScores:'ҚЫЗМЕТКЕР РӨЛДЕРІ',
+    keyLimit:'НЕГІЗГІ ШЕКТЕУ',firstSteps:'АЛҒАШҚЫ ҚАДАМДАР',
+    demo:'Демо-қол жеткізу',
+    featHot:'↑ сізге керек',
+    featNames:['Тамақтануды басқару','Оқытуды геймификациялау','Қаржыны басқару','Электрондық күнделік','Баланың дамуын талдау','Ата-аналармен байланыс','Электрондық құжат айналымы','12 AI-кабинет'],
+    cabNames:['Директор AI','Қаржы AI','Сату AI','HR AI','Әдіскер AI','Медициналық кабинет','Ата-ана кабинеті','Тәрбиеші AI','Бала күтуші AI','Аспаз AI','Меңгеруші AI','Администратор AI'],
+  },
+  uz:{
+    langName:"O'zbek",
+    iEyebrow:"Bepul diagnostika",
+    iH1:"Tashkilotingiz <em>o'sishiga nima to'sqinlik qilayotganini</em> bilib oling",
+    iSub:"12–15 daqiqada o'z-o'zini baholashdan o'ting. Ob'ektiv manzara va 3 kunlik bepul demo oling.",
+    iS1:'blok',iS2:'daqiqa',iS3:"daraja",iS4:'kun demo',
+    iBtn:"Diagnostikadan o'tish — bu bepul →",
+    fTitle:"Siz va markazingiz haqida",
+    fSub:"Diagnostikadan oldin to'ldiring — maslahatchi uchrashuv oldidan o'qiydi",
+    qInstruction:"O'z darajangizni baholang",
+    flName:'FIO',flRole:'Lavozim',flEmail:'Email',flTelegram:'Telegram',flPhone:'Telefon',flWhatsapp:'WhatsApp',flCenter:'Markaz nomi',flCity:'Shahar',
+    flType:'Tashkilot turi',flKids:"Hozirgi bolalar soni",
+    flProblems:"Hozirgi 3 ta asosiy muammo",flHelp:"Qanday yordam olishni xohlaysiz?",
+    flSource:"Ordo haqida qayerdan bildingiz?",
+    abA:'📍 A nuqtasi — hozir',abB:'🎯 B nuqtasi — 6 oydan keyin',
+    revenueNow:"Hozirgi aylanma",revenueGoal:"Maqsadli aylanma",
+    kidsNow:"Hozirgi bolalar",kidsGoal:"Maqsadli bolalar soni",
+    roles:["Direktor / Egasi","Boshqaruvchi","Sherik","Boshqa"],
+    types:["Bog'cha (to'liq kun)","Mini-bog'cha (yarim kun)","Rivojlantirish markazi","To'garaklar / seksiyalar","Bir nechta format"],
+    revRangesNow:["500 000 so'mgacha","500 000 – 1 500 000 so'm","1 500 000 – 3 000 000 so'm","3 000 000 – 6 000 000 so'm","6 000 000 so'mdan ortiq"],
+    revRangesGoal:["1 500 000 so'mgacha","1 500 000 – 3 000 000 so'm","3 000 000 – 6 000 000 so'm","6 000 000 – 10 000 000 so'm","10 000 000 so'mdan ortiq"],
+    sources:["Aydaning Instagrami (@aidabintazamat)","Ordo Education Instagram","YouTube","Telegram","Hamkasb tavsiyasi bilan","2GIS / Google","Tadbirda bo'ldim","Boshqa"],
+    fbBack:'← Orqaga',fbNext:"Diagnostikaga o'tish →",
+    btnBack:'← Orqaga',btnNext:"Keyingi →",btnRoles:"Rollarga o'tish →",btnResult:"Natijani ko'rsatish →",
+    secBiz:'Biznes',secRoles:'Xodimlar rollari',
+    stepOf:'/',
+    rTitle:"Diagnostika natijasi",
+    rAvgPre:"O'rtacha daraja:",rAvgSuf:"/ 5",
+    rlBiz:'Biznes-jarayonlar',rlRoles:'Xodimlar rollari',
+    rlFeats:"Platforma nima beradi — muammolaringiz bo'yicha",
+    rlCabs:"12 AI-kabinet — har bir xodim uchun",
+    bnLbl:"Asosiy cheklov",
+    bnWhy:"Bu eng zaif biznes-jarayon. Uni bartaraf etish o'sishni boshlaydi.",
+    bnSolPre:"Ordo qanday hal qiladi:",
+    solveTitle:"🚀 Ordo Education muammolaringizni qanday hal qiladi",
+    tasksTitle:"Nima qilish kerak va Ordo qanday yordam beradi",
+    roleTasksTitle:"Rol bo'yicha shoshilinch —",
+    quote:"«Direktor kabineti barcha bo'limlar tahlilini yagona dashboard-ga yig'adi — moliya, sotuv, to'liqlik, xodimlar — real vaqtda. Qo'lda jadval yo'q.»",
+    ctaT:"3 kunlik bepul kirish oling",
+    ctaS:"Maslahatchi natijangizni ko'rib turibdi.\nPlatformani sinab ko'ring — to'lovsiz, majburiyatsiz.",
+    ctaBtn1:"🚀 Bepul sinab ko'rish",ctaCopy:"📋 Natijani nusxalash",ctaCopied:"✓ Nusxalandi",
+    ctaFineDays:"kun bepul kirish",
+    introNote:'📋 Anketani toldiring va diagnostikadan oting — natijalaringizni organib, qongiroqqa tayyorlanaman.',
+    ctaBtn2:'🎁 Ordo bepul',
+    ctaT:'Ajoyib! Natija tayyor 🎉',
+    ctaS:"Ayda bilan tahlilga yozing — u natijalaringizni ko'rdi.",
+    ctaBtn1:'📅 Ayda bilan qongiroqqa yozilish',
+    introNote:"📋 Anketani to'ldiring va diagnostikadan o'ting — men natijalaringizni o'rganib, qo'ng'iroqqa tayyorlanaman.",
+    ctaBtn2:"🎁 Ordo bepul",
+    ctaT:"Ajoyib! Natija tayyor 🎉",
+    ctaS:"Ayda bilan tahlilga yozing — u natijalaringizni ko'rdi va uchrashuvga tayyorlanadi.",
+    ctaBtn1:"📅 Ayda bilan qo'ng'iroqqa yozilish",
+    naLabel:["Markazda pedagog yo'q","Oshpaz ko'zda tutilmagan","Enaga ko'zda tutilmagan"],
+    naSkip:"— bu blokni o'tkazib yuborish",
+    notApplicable:"qo'llanilmaydi",
+    pointA:"A nuqtasi (hozir)",pointB:"B nuqtasi (maqsad)",
+    kids:"bola",source:"Manba",
+    bizScores:"BIZNES-JARAYONLAR",roleScores:"XODIMLAR ROLLARI",
+    keyLimit:"ASOSIY CHEKLOV",firstSteps:"BIRINCHI QADAMLAR",
+    demo:"Demo-kirish",
+    featHot:"↑ siz uchun",
+    featNames:["Ovqatlanishni boshqarish","O'qitishni o'yinlashtirish","Moliyani boshqarish","Elektron kundalik","Bolaning rivojlanishini tahlil qilish","Ota-onalar bilan muloqot","Elektron hujjat aylanmasi","12 AI-kabinet"],
+    cabNames:["Direktor AI","Moliya AI","Sotuv AI","HR AI","Metodist AI","Tibbiy kabinet","Ota-ona kabineti","Tarbiyachi AI","Enaga AI","Oshpaz AI","Mudira AI","Administrator AI"],
+  },
+  kg:{
+    langName:'Кыргызча',
+    iEyebrow:'Акысыз диагностика',
+    iH1:'Уюмуңуздун <em>өсүшүнө эмне тоскоол</em> экенин билиңиз',
+    iSub:'12–15 мүнөттө өзүңүздү баалаңыз. Объективдүү сүрөт жана 3 күндүк акысыз демо алыңыз.',
+    iS1:'блок',iS2:'мүнөт',iS3:'деңгээл',iS4:'күн демо',
+    iBtn:'Диагностикадан өтүү — бул акысыз →',
+    fTitle:'Сиз жана борборуңуз жөнүндө',
+    fSub:'Диагностикага чейин толтуруңуз — кеңешчи жолугушуунун алдында окуйт',
+    qInstruction:'Өзүңдүн деңгээлиңди баала',
+    flName:'ФИО',flRole:'Кызматы',flEmail:'Email',flTelegram:'Telegram',flCenter:'Борбордун аты',flCity:'Шаар',
+    flType:'Уюм түрү',flKids:'Азыркы балдар саны',
+    flProblems:'Азыркы 3 негизги маселе',flHelp:'Кандай жардам алгыңыз келет?',
+    flSource:'Ordo жөнүндө кайдан билдиңиз?',
+    abA:'📍 А чекити — азыр',abB:'🎯 Б чекити — 6 айдан кийин',
+    revenueNow:'Азыркы айлануу',revenueGoal:'Максаттуу айлануу',
+    kidsNow:'Азыркы балдар',kidsGoal:'Максаттуу балдар саны',
+    roles:['Директор / Ээси','Башкаруучу','Өнөктөш','Башка'],
+    types:['Бала бакча (толук күн)','Мини-бала бакча (жарты күн)','Өнүктүрүү борбору','Үйрөмчөлөр / секциялар','Бир нече формат'],
+    revRangesNow:['500 000 сомго чейин','500 000 – 1 500 000 сом','1 500 000 – 3 000 000 сом','3 000 000 – 6 000 000 сом','6 000 000 сомдон жогору'],
+    revRangesGoal:['1 500 000 сомго чейин','1 500 000 – 3 000 000 сом','3 000 000 – 6 000 000 сом','6 000 000 – 10 000 000 сом','10 000 000 сомдон жогору'],
+    sources:['Айданын Instagram-ы (@aidabintazamat)','Ordo Education Instagram','YouTube','Telegram','Кесиптештин сунушу боюнча','2GIS / Google','Иш-чарада болдум','Башка'],
+    fbBack:'← Артка',fbNext:'Диагностикага өтүү →',
+    btnBack:'← Артка',btnNext:'Кийинки →',btnRoles:'Ролдорго өтүү →',btnResult:'Натыйжаны көрсөтүү →',
+    secBiz:'Бизнес',secRoles:'Кызматкерлердин ролдору',
+    stepOf:'/',
+    rTitle:'Диагностика натыйжасы',
+    rAvgPre:'Орточо деңгээл:',rAvgSuf:'/ 5',
+    rlBiz:'Бизнес-процесстер',rlRoles:'Кызматкерлердин ролдору',
+    rlFeats:'Платформа эмне берет — сиздин маселелериңиз боюнча',
+    rlCabs:'12 AI-кабинет — ар бир кызматкерге',
+    bnLbl:'Негизги чектөө',
+    bnWhy:'Бул эң алсыз бизнес-процесс. Аны жоюу өсүштү ачат.',
+    bnSolPre:'Ordo кантип чечет:',
+    solveTitle:'🚀 Ordo Education дал сиздин маселелериңизди кантип чечет',
+    tasksTitle:'Эмне кылуу керек жана Ordo кантип жардам берет',
+    roleTasksTitle:'Рол боюнча шашылыш —',
+    quote:'«Директор кабинети бардык бөлүмдөрдүн аналитикасын бир дашбордко жыйнайт — каржы, сатуу, толукталуу, персонал — реалдуу убакытта. Кол менен таблица жок.»',
+    ctaT:'3 күнгө акысыз кирүү алыңыз',
+    ctaS:'Кеңешчи натыйжаңызды көрүп турат.\nПлатформаны байкап көрүңүз — төлөмсүз, милдеттенмесиз.',
+    ctaBtn1:'🚀 Акысыз байкап көрүү',ctaCopy:'📋 Натыйжаны көчүрүү',ctaCopied:'✓ Көчүрүлдү',
+    ctaFineDays:'күн акысыз кирүү',
+    introNote:'📋 Анкетаны толтур жана диагностикадан өт — натыйжаларыңды изилдеп, чалышыбызга даярданам.',
+    ctaBtn2:'🎁 Ordo акысыз',
+    ctaT:'Мыкты! Натыйжа даяр 🎉',
+    ctaS:'Айда менен талдоого жазыл — натыйжаларыңды көрүп, даярданат.',
+    ctaBtn1:'📅 Айда менен созвонго жазылуу',
+    naLabel:['Борборда педагог жок','Ашпозчу каралган эмес','Бала карачы каралган эмес'],
+    naSkip:'— бул блокту өткөрүп жибер',
+    notApplicable:'колдонулбайт',
+    pointA:'А чекити (азыр)',pointB:'Б чекити (максат)',
+    kids:'бала',source:'Булак',
+    bizScores:'БИЗНЕС-ПРОЦЕССТЕР',roleScores:'КЫЗМАТКЕРЛЕРДИН РОЛДОРУ',
+    keyLimit:'НЕГИЗГИ ЧЕКТӨӨ',firstSteps:'БИРИНЧИ КАДАМДАР',
+    demo:'Демо-кирүү',
+    featHot:'↑ сизге керек',
+    featNames:['Тамактануunu башкаруу','Окутууну оюнга айлантуу','Каржыны башкаруу','Электрондук күндөлүк','Баланын өнүгүүсүн талдоо','Ата-энелер менен байланыш','Электрондук документ айлануу','12 AI-кабинет'],
+    cabNames:['Директор AI','Каржы AI','Сатуу AI','HR AI','Методист AI','Медициналык кабинет','Ата-эне кабинети','Тарбиячы AI','Бала карачы AI','Ашпозчу AI','Башчы AI','Администратор AI'],
+  },
+  tj:{
+    langName:'Тоҷикӣ',
+    iEyebrow:'Ташхиси ройгон',
+    iH1:'Бидонед, ки <em>чӣ монеаи рушди</em> ташкилоти шумо аст',
+    iSub:'Дар 12–15 дақиқа худро арзёбӣ кунед. Тасвири объективӣ ва дастрасии намоишии 3-рӯза бигиред.',
+    iS1:'блок',iS2:'дақиқа',iS3:'сатҳ',iS4:'рӯз намоиш',
+    iBtn:'Аз ташхис гузаштан — ин ройгон аст →',
+    fTitle:'Дар бораи шумо ва маркази шумо',
+    fSub:'Пеш аз ташхис пур кунед — мушовир пеш аз вохӯрӣ мехонад',
+    qInstruction:'Сатҳи худро арзёбӣ кун',
+    flName:'Ном ва насаб',flRole:'Вазифа',flEmail:'Email',flTelegram:'Telegram',flCenter:'Номи марказ',flCity:'Шаҳр',
+    flType:'Навъи ташкилот',flKids:'Шумораи кӯдакони айнӣ',
+    flProblems:'3 мушкилоти асосии айнӣ',flHelp:'Чӣ кӯмак мехоҳед?',
+    flSource:'Дар бораи Ordo аз куҷо донистед?',
+    abA:'📍 Нуқтаи А — ҳоло',abB:'🎯 Нуқтаи Б — пас аз 6 моҳ',
+    revenueNow:'Гардиши айнӣ',revenueGoal:'Гардиши мақсадӣ',
+    kidsNow:'Кӯдакони айнӣ',kidsGoal:'Шумораи мақсадии кӯдакон',
+    roles:['Директор / Соҳиб','Мудир','Шарик','Дигар'],
+    types:['Кӯдакистон (рӯзи пурра)','Мини-кӯдакистон (нисфи рӯз)','Маркази рушд','Доираҳо / сексияҳо','Форматҳои гуногун'],
+    revRangesNow:['то 500 000 сомонӣ','500 000 – 1 500 000 сомонӣ','1 500 000 – 3 000 000 сомонӣ','3 000 000 – 6 000 000 сомонӣ','аз 6 000 000 сомонӣ зиёд'],
+    revRangesGoal:['то 1 500 000 сомонӣ','1 500 000 – 3 000 000 сомонӣ','3 000 000 – 6 000 000 сомонӣ','6 000 000 – 10 000 000 сомонӣ','аз 10 000 000 сомонӣ зиёд'],
+    sources:['Инстаграми Айда (@aidabintazamat)','Инстаграми Ordo Education','YouTube','Telegram','Тавсияи ҳамкор','2GIS / Google','Дар чорабинӣ будам','Дигар'],
+    fbBack:'← Бозгашт',fbNext:'Гузаштан ба ташхис →',
+    btnBack:'← Бозгашт',btnNext:'Навбатӣ →',btnRoles:'Гузаштан ба нақшҳо →',btnResult:'Нишон додани натиҷа →',
+    secBiz:'Бизнес',secRoles:'Нақшҳои кормандон',
+    stepOf:'аз',
+    rTitle:'Натиҷаи ташхис',
+    rAvgPre:'Сатҳи миёна:',rAvgSuf:'аз 5',
+    rlBiz:'Равандҳои тиҷорӣ',rlRoles:'Нақшҳои кормандон',
+    rlFeats:'Платформа чӣ медиҳад — мувофиқи мушкилоти шумо',
+    rlCabs:'12 AI-кабинет — барои ҳар корманд',
+    bnLbl:'Маҳдудияти асосӣ',
+    bnWhy:'Ин заифтарин равандест. Бартараф кардани он рушдро кушода мекунад.',
+    bnSolPre:'Ordo чӣ тавр ҳал мекунад:',
+    solveTitle:'🚀 Ordo Education мушкилоти шуморо чӣ тавр ҳал мекунад',
+    tasksTitle:'Чӣ кор кардан ва Ordo чӣ тавр кӯмак мекунад',
+    roleTasksTitle:'Фаврӣ аз рӯи нақш —',
+    quote:'«Кабинети директор таҳлили ҳамаи шӯъбаҳоро дар як дашборд ҷамъ мекунад — молия, фурӯш, пуршавӣ, кормандон — дар вақти воқеӣ. Бидуни ҷадвалҳои дастӣ.»',
+    ctaT:'Дастрасии ройгони 3-рӯзаро гиред',
+    ctaS:'Мушовир натиҷаи шуморо мебинад.\nПлатформаро санҷед — бидуни пардохт.',
+    ctaBtn1:'🚀 Озмоиши ройгон',ctaCopy:'📋 Нусхабардории натиҷа',ctaCopied:'✓ Нусхабардорӣ шуд',
+    ctaFineDays:'рӯзи дастрасии ройгон',
+    introNote:'📋 Анкетаро пур кун — натиҷаҳоятро меомӯзам ва барои занги мо омода мешавам.',
+    ctaBtn2:'🎁 Ordo ройгон',
+    ctaT:'Олӣ! Натиҷа омода аст 🎉',
+    ctaS:'Ба таҳлил бо Айда сабт шав — вай натиҷаҳоятро дид.',
+    ctaBtn1:'📅 Ба занги Айда сабт шудан',
+    naLabel:['Дар марказ педагог нест','Ошпаз пешбинӣ нашудааст','Дояи кӯдак пешбинӣ нашудааст'],
+    naSkip:'— ин блокро гузарондан',
+    notApplicable:'татбиқ намешавад',
+    pointA:'Нуқтаи А (ҳоло)',pointB:'Нуқтаи Б (мақсад)',
+    kids:'кӯдак',source:'Манбаъ',
+    bizScores:'РАВАНДҲОИ ТИҶОРӢ',roleScores:'НАҚШҲОИ КОРМАНДОН',
+    keyLimit:'МАҲДУДИЯТИ АСОСӢ',firstSteps:'ҚАДАМҲОИ АВВАЛ',
+    demo:'Дастрасии намоишӣ',
+    featHot:'↑ барои шумо',
+    featNames:['Идоракунии ғизо','Геймификатсияи таълим','Идоракунии молия','Рӯзномаи электронӣ','Таҳлили рушди кӯдак','Муошират бо волидайн','Гардиши электронии ҳуҷҷат','12 AI-кабинет'],
+    cabNames:['Директор AI','Молия AI','Фурӯш AI','HR AI','Методист AI','Кабинети тиббӣ','Кабинети волидайн','Тарбиятгар AI','Дояи кӯдак AI','Ошпаз AI','Мудир AI','Маъмур AI'],
+  },
+  en:{
+    langName:'English',
+    iEyebrow:'Free diagnostic',
+    iH1:'Find out <em>what is holding back</em> your organization\'s growth',
+    iSub:'Complete this self-assessment in 12–15 minutes. Get an objective picture and 3 days of free demo access.',
+    iS1:'blocks',iS2:'minutes',iS3:'levels',iS4:'days demo',
+    iBtn:'Take the diagnostic — it\'s free →',
+    fTitle:'About you and your center',
+    fSub:'Fill in before the diagnostic — the consultant will review it before your meeting',
+    qInstruction:'Rate your current level',
+    flName:'Full name',flRole:'Position',flEmail:'Email',flTelegram:'Telegram',flPhone:'Phone',flWhatsapp:'WhatsApp',flCenter:'Center name',flCity:'City',
+    flType:'Organization type',flKids:'Current number of children',
+    flProblems:'Top 3 problems right now',flHelp:'What help do you want to receive?',
+    flSource:'How did you find out about Ordo?',
+    abA:'📍 Point A — now',abB:'🎯 Point B — in 6 months',
+    revenueNow:'Current revenue',revenueGoal:'Target revenue',
+    kidsNow:'Current children',kidsGoal:'Target number of children',
+    roles:['Director / Owner','Manager','Partner','Other'],
+    types:['Full-day kindergarten','Mini-kindergarten (part-day)','Development center','Clubs / sections','Multiple formats'],
+    revRangesNow:['under $1,000/mo','$1,000 – $3,000/mo','$3,000 – $7,000/mo','$7,000 – $15,000/mo','over $15,000/mo'],
+    revRangesGoal:['under $3,000/mo','$3,000 – $7,000/mo','$7,000 – $15,000/mo','$15,000 – $25,000/mo','over $25,000/mo'],
+    sources:['Aida\'s Instagram (@aidabintazamat)','Ordo Education Instagram','YouTube','Telegram','Colleague recommendation','Google / Maps','Attended an event','Other'],
+    fbBack:'← Back',fbNext:'Go to diagnostic →',
+    btnBack:'← Back',btnNext:'Next →',btnRoles:'Go to roles →',btnResult:'Show result →',
+    secBiz:'Business',secRoles:'Staff roles',
+    stepOf:'of',
+    rTitle:'Diagnostic result',
+    rAvgPre:'Average score:',rAvgSuf:'out of 5',
+    rlBiz:'Business processes',rlRoles:'Staff roles',
+    rlFeats:'What the platform offers — based on your problems',
+    rlCabs:'12 AI-cabinets — one for each staff member',
+    bnLbl:'Key constraint',
+    bnWhy:'This is the weakest business process. Fixing it will unlock growth.',
+    bnSolPre:'How Ordo solves it:',
+    solveTitle:'🚀 How Ordo Education solves your specific problems',
+    tasksTitle:'What to do and how Ordo helps',
+    roleTasksTitle:'Urgent by role —',
+    quote:'"The Director\'s cabinet collects analytics from all departments into a single dashboard — finance, sales, occupancy, staff — in real time. No manual spreadsheets."',
+    ctaT:'Get free access for 3 days',
+    ctaS:'Your consultant can already see your result.\nTry the platform — no payment, no commitment.',
+    ctaBtn1:'🚀 Try for free',ctaCopy:'📋 Copy result',ctaCopied:'✓ Copied',
+    ctaFineDays:'days of free access',
+    introNote:'📋 Fill in the form and complete the diagnostic — I will review your results before our call.',
+    ctaBtn2:'🎁 Try Ordo free',
+    ctaT:'Great! Your result is ready 🎉',
+    ctaS:'Book a review call with Aida — she already sees your results.',
+    ctaBtn1:'📅 Book a call with Aida',
+    naLabel:['No teachers in this center','Cook not applicable','Nanny not applicable'],
+    naSkip:'— skip this block',
+    notApplicable:'not applicable',
+    pointA:'Point A (now)',pointB:'Point B (goal)',
+    kids:'children',source:'Source',
+    bizScores:'BUSINESS PROCESSES',roleScores:'STAFF ROLES',
+    keyLimit:'KEY CONSTRAINT',firstSteps:'FIRST STEPS',
+    demo:'Demo access',
+    featHot:'↑ for you',
+    featNames:['Nutrition management','Learning gamification','Financial management','Electronic diary','Child development analysis','Parent communication','Electronic document flow','12 AI-cabinets'],
+    cabNames:['Director AI','Finance AI','Sales AI','HR AI','Methodologist AI','Medical cabinet','Parent cabinet','Teacher AI','Nanny AI','Cook AI','Head AI','Administrator AI'],
+  },
+  ms:{
+    langName:'Bahasa Melayu',
+    iEyebrow:'Diagnostik Percuma',
+    iH1:'Ketahui apa yang <em>menghalang pertumbuhan</em> organisasi anda',
+    iSub:'Selesaikan penilaian kendiri dalam 12–15 minit. Dapatkan gambaran objektif dan akses demo percuma selama 3 hari.',
+    iS1:'blok',iS2:'minit',iS3:'tahap',iS4:'hari demo',
+    iBtn:'Ambil diagnostik — ia percuma →',
+    fTitle:'Tentang anda dan pusat anda',
+    fSub:'Isi sebelum diagnostik — perunding akan menyemak sebelum pertemuan',
+    qInstruction:'Nilai tahap anda sekarang',
+    flName:'Nama penuh',flRole:'Jawatan',flEmail:'Email',flTelegram:'Telegram',flCenter:'Nama pusat',flCity:'Bandar',
+    flType:'Jenis organisasi',flKids:'Bilangan kanak-kanak semasa',
+    flProblems:'3 masalah utama sekarang',flHelp:'Bantuan apa yang anda inginkan?',
+    flSource:'Bagaimana anda mengetahui tentang Ordo?',
+    abA:'📍 Titik A — sekarang',abB:'🎯 Titik B — dalam 6 bulan',
+    revenueNow:'Hasil semasa',revenueGoal:'Hasil sasaran',
+    kidsNow:'Kanak-kanak sekarang',kidsGoal:'Sasaran bilangan kanak-kanak',
+    roles:['Pengarah / Pemilik','Pengurus','Rakan Kongsi','Lain-lain'],
+    types:['Tadika (sehari penuh)','Tadika Mini (separuh hari)','Pusat Pembangunan','Kelab / Seksyen','Pelbagai Format'],
+    revRangesNow:['bawah RM 2,000/bln','RM 2,000 – 6,000/bln','RM 6,000 – 14,000/bln','RM 14,000 – 28,000/bln','lebih RM 28,000/bln'],
+    revRangesGoal:['bawah RM 6,000/bln','RM 6,000 – 14,000/bln','RM 14,000 – 28,000/bln','RM 28,000 – 50,000/bln','lebih RM 50,000/bln'],
+    sources:['Instagram Aida (@aidabintazamat)','Instagram Ordo Education','YouTube','Telegram','Cadangan rakan sekerja','Google / Peta','Hadir acara','Lain-lain'],
+    fbBack:'← Kembali',fbNext:'Pergi ke diagnostik →',
+    btnBack:'← Kembali',btnNext:'Seterusnya →',btnRoles:'Pergi ke peranan →',btnResult:'Tunjukkan keputusan →',
+    secBiz:'Perniagaan',secRoles:'Peranan Kakitangan',
+    stepOf:'daripada',
+    rTitle:'Keputusan Diagnostik',
+    rAvgPre:'Skor purata:',rAvgSuf:'daripada 5',
+    rlBiz:'Proses Perniagaan',rlRoles:'Peranan Kakitangan',
+    rlFeats:'Apa yang platform tawarkan — berdasarkan masalah anda',
+    rlCabs:'12 Kabinet AI — satu untuk setiap ahli kakitangan',
+    bnLbl:'Kekangan Utama',
+    bnWhy:'Ini adalah proses perniagaan yang paling lemah. Menyelesaikannya akan membuka pertumbuhan.',
+    bnSolPre:'Cara Ordo menyelesaikannya:',
+    solveTitle:'🚀 Cara Ordo Education menyelesaikan masalah spesifik anda',
+    tasksTitle:'Apa yang perlu dilakukan dan cara Ordo membantu',
+    roleTasksTitle:'Segera untuk peranan —',
+    quote:'"Kabinet Pengarah mengumpulkan analitik dari semua jabatan ke dalam satu papan pemuka — kewangan, jualan, kadar pengisian, kakitangan — dalam masa nyata. Tiada hamparan manual."',
+    ctaT:'Dapatkan akses percuma selama 3 hari',
+    ctaS:'Perunding anda sudah dapat melihat keputusan anda.\nCuba platform ini — tanpa bayaran, tanpa komitmen.',
+    ctaBtn1:'🚀 Cuba percuma',ctaCopy:'📋 Salin keputusan',ctaCopied:'✓ Disalin',
+    ctaFineDays:'hari akses percuma',
+    introNote:'📋 Isi borang dan jalani diagnostik — saya akan mengkaji keputusan anda sebelum panggilan kita.',
+    ctaBtn2:'🎁 Cuba Ordo percuma',
+    ctaT:'Hebat! Keputusan anda sedia 🎉',
+    ctaS:'Tempah sesi dengan Aida — beliau sudah melihat keputusan anda.',
+    ctaBtn1:'📅 Tempah panggilan dengan Aida',
+    naLabel:['Tiada pendidik di pusat ini','Tukang masak tidak berkenaan','Pengasuh tidak berkenaan'],
+    naSkip:'— langkau blok ini',
+    notApplicable:'tidak berkenaan',
+    pointA:'Titik A (sekarang)',pointB:'Titik B (sasaran)',
+    kids:'kanak-kanak',source:'Sumber',
+    bizScores:'PROSES PERNIAGAAN',roleScores:'PERANAN KAKITANGAN',
+    keyLimit:'KEKANGAN UTAMA',firstSteps:'LANGKAH PERTAMA',
+    demo:'Akses demo',
+    featHot:'↑ untuk anda',
+    featNames:['Pengurusan pemakanan','Gamifikasi pembelajaran','Pengurusan kewangan','Diari elektronik','Analisis perkembangan kanak-kanak','Komunikasi ibu bapa','Aliran dokumen elektronik','12 Kabinet AI'],
+    cabNames:['Pengarah AI','Kewangan AI','Jualan AI','HR AI','Metodologis AI','Kabinet Perubatan','Kabinet Ibu Bapa','Guru AI','Pengasuh AI','Tukang Masak AI','Ketua AI','Pentadbir AI'],
+  }
+};
+
+// ─── BLOCKS (content keys only, labels from T[lang]) ─────────────────
+const BLOCKS=[
+  {id:'marketing',sec:'biz',ico:'📢',hintKey:'mkt',tipKey:'mkt',ordoSolveKey:'mkt',
+   levelsKey:'mkt',ordoHintsKey:'mkt',tasksKey:'mkt'},
+  {id:'sales',sec:'biz',ico:'💰',levelsKey:'sales',tasksKey:'sales',tipKey:'sales',ordoSolveKey:'sales',ordoHintsKey:'sales'},
+  {id:'product',sec:'biz',ico:'🎓',levelsKey:'product',tasksKey:'product',tipKey:'product',ordoSolveKey:'product',ordoHintsKey:'product'},
+  {id:'service',sec:'biz',ico:'🤝',levelsKey:'service',tasksKey:'service',tipKey:'service',ordoSolveKey:'service',ordoHintsKey:'service'},
+  {id:'finance',sec:'biz',ico:'📊',levelsKey:'finance',tasksKey:'finance',tipKey:'finance',ordoSolveKey:'finance',ordoHintsKey:'finance'},
+  {id:'management',sec:'biz',ico:'📋',levelsKey:'mgmt',tasksKey:'mgmt',tipKey:'mgmt',ordoSolveKey:'mgmt',ordoHintsKey:'mgmt'},
+  {id:'legal',sec:'biz',ico:'🛡️',levelsKey:'legal',tasksKey:'legal',tipKey:'legal',ordoSolveKey:'legal',ordoHintsKey:'legal'},
+  {id:'hr',sec:'biz',ico:'📑',levelsKey:'hr',tasksKey:'hr',tipKey:'hr',ordoSolveKey:'hr',ordoHintsKey:'hr'},
+  {id:'ltv',sec:'biz',ico:'🔄',levelsKey:'ltv',tasksKey:'ltv',tipKey:'ltv',ordoSolveKey:'ltv',ordoHintsKey:'ltv'},
+  {id:'teacher',sec:'roles',ico:'👩‍🏫',naIdx:0,levelsKey:'teacher',tasksKey:'teacher',tipKey:'teacher',ordoSolveKey:'teacher',ordoHintsKey:'teacher'},
+  {id:'cook',sec:'roles',ico:'👨‍🍳',naIdx:1,levelsKey:'cook',tasksKey:'cook',tipKey:'cook',ordoSolveKey:'cook',ordoHintsKey:'cook'},
+  {id:'nanny',sec:'roles',ico:'🧸',naIdx:2,levelsKey:'nanny',tasksKey:'nanny',tipKey:'nanny',ordoSolveKey:'nanny',ordoHintsKey:'nanny'},
+];
+
+const CONTENT={"ru": {"names": {"marketing": "Маркетинг", "sales": "Продажи", "product": "Продукт", "service": "Сервис", "finance": "Финансы", "management": "Управление", "legal": "Юридическая защита", "hr": "Кадровая защита", "ltv": "Удержание (LTV)", "teacher": "Педагог", "cook": "Повар", "nanny": "Няня"}, "hints": {"marketing": "Привлечение новых клиентов", "sales": "Закрытие входящих заявок", "product": "УТП и лояльность клиентов", "service": "Работа с жалобами и возвратами", "finance": "Учёт и управление деньгами", "management": "Управление командой и задачами", "legal": "Документы, договоры, проверки", "hr": "Оформление сотрудников и текучка", "ltv": "Посещаемость, оплаты, перерасчёты", "teacher": "Стандарты и образовательный процесс", "cook": "Питание, меню, закупки, нормы", "nanny": "Уход за детьми, уборка, режим дня"}, "tips": {"marketing": "Кабинет <strong>Продажи AI</strong> отслеживает источники клиентов и даёт рекомендации.", "sales": "<strong>Продажи AI</strong> ведёт CRM, напоминает о заявках и помогает закрывать клиентов.", "product": "<strong>Анализ развития ребёнка</strong> — родители видят прогресс онлайн. Это ваше УТП.", "finance": "<strong>Финансы AI</strong> — ДДС, ОПУ, перерасчёты автоматически.", "management": "<strong>Директор AI</strong> — единый дашборд по всем отделам.", "legal": "<strong>Документооборот</strong> хранит все договоры и формирует пакет к проверке в 1 клик.", "hr": "<strong>HR AI</strong> — личные дела, KPI, мотивация в цифровом виде.", "ltv": "<strong>Электронный дневник</strong> — табели, перерасчёты и платежи автоматически.", "service": "<strong>Коммуникации</strong> — родители получают уведомления и дневник онлайн.", "teacher": "<strong>Воспитатель AI</strong> — готовые уроки по госстандарту на каждый день.", "cook": "<strong>Повар AI</strong> — меню, закупки и склад связаны. Родители видят рацион онлайн.", "nanny": "<strong>Няня AI</strong> — задачи, чек-листы и отчёты в цифровом виде."}, "ordoSolve": {"marketing": "«Продажи AI» — воронка, лиды, аналитика в одном экране", "sales": "«Продажи AI» — CRM, заявки, напоминания, скрипты", "product": "Электронный дневник + анализ развития — ваше главное УТП", "service": "Кабинет родителя + коммуникации — снижает жалобы и возвраты", "finance": "«Финансы AI» — ДДС, ОПУ, перерасчёты, платёжный календарь", "management": "«Директор AI» — дашборд по всем показателям в реальном времени", "legal": "Электронный документооборот — пакет к проверке за 1 клик", "hr": "«HR AI» — личные дела, KPI, мотивация под контролем", "ltv": "Электронный журнал — табели и перерасчёты автоматически", "teacher": "«Воспитатель AI» — 10 000+ уроков на 3 языках", "cook": "«Повар AI» — меню, закупки, склад, нормы автоматически", "nanny": "«Няня AI» — задачи, уборка, уход за детьми в цифровом формате"}, "levels": {"marketing": ["Интернет-рекламы нет — только сарафанное радио и объявления", "Есть материалы, но они не приносят результата", "Есть бюджет на рекламу, получается привлекать. Эффективность не измеряется", "Понимаю эффективность рекламы, юнит-экономика сходится", "Маркетинговая стратегия, системное тестирование гипотез"], "sales": ["Продаю сам(а), без скриптов и структуры", "Есть персонал, работает как умеет. Замер — только «сколько продали»", "Есть скрипты продаж, замеряются основные конверсии", "CRM, деление на новых/повторных клиентов, еженедельный анализ", "Отдел продаж автономен, план выполняется в 90% случаев"], "product": ["Продукт порождает разочарования и возвраты", "Нет УТП, нет стабильных положительных отзывов", "Клиенты лояльны, значительная доля приходит по рекомендации", "Ярко выраженное УТП — клиент получает то, чего нет у конкурентов", "Продукт сам по себе двигает рост без маркетинга"], "service": ["Возвраты >10%, негатив в интернете", "Возвраты 5–10%, реагируем на каждый случай отдельно", "Возвраты <5%, есть ответственный за работу с жалобами", "NPS замеряется, служба сервиса работает системно", "Карта клиентского пути, все метрики качества"], "finance": ["Кассовые разрывы, не понимаю куда уходят деньги", "Есть базовые таблицы, но решения принимаю интуитивно", "Веду ДДС и платёжный календарь, разрывов нет", "Веду ОПУ и Баланс, бюджетирование, учёт автоматизирован", "Финансовое моделирование, финдиректор в штате"], "management": ["Ручное управление, всё держится на мне", "Зоны ответственности есть, задачи ставлю письменно", "Еженедельное планирование, ежедневный учёт показателей", "Задачи в системе, бизнес-процессы описаны", "Операционный директор, собственник — только на уровне стратегии"], "legal": ["Документы с ошибками или отсутствуют, любая проверка — штраф", "Договоры в папках, подготовка к проверке только под визит", "Нужны юрист и методист, поддержка трудоёмкая", "Контроль методиста есть, но директор тратит много ресурсов", "Все документы в цифре, пакет к проверке — в 1 клик"], "hr": ["Сотрудники без договоров, текучка высокая, конфликты", "Трудовые договоры оформляются, но всё в бумажных папках", "Кадровые данные в Excel: отпуска, графики, табели", "Нужен отдельный HR, нагрузка растёт", "Все личные дела в цифре, KPI и мотивация в системе"], "ltv": ["Табели на бумаге, платежи без чеков, перерасчёты с ошибками", "Ведомости в папках, перерасчёты вручную", "Учёт в Excel/Google Sheets, базовая прозрачность", "Нужен бухгалтер, объём документов растёт", "Табели, перерасчёты и платежи автоматически в одной системе"], "teacher": ["Большая зависимость от педагога, нет стандартов. Если уходит — процесс рушится", "Есть должностные инструкции, но контроль ручной, отчётность устная", "Планы в Word/Excel, методист проверяет с задержкой", "Контроль методиста есть, но директор тратит много ресурсов", "Процесс полностью оцифрован — родители и директор видят аналитику онлайн"], "cook": ["Питание хаотично, меню нет, жалобы родителей", "Меню появилось, но всё на бумаге. Контроль нерегулярный", "Система питания упорядочена, но требует постоянных проверок", "Частичная автоматизация, повар работает по нормам", "Питание полностью автоматизировано: меню, закупки и склад связаны"], "nanny": ["Обязанности не определены, работа хаотична", "Задачи формализованы, но выполнение не проверяется системно", "Чек-листы в Excel, данные разрознены", "Формально работает, но нужны доп. администраторы", "Задачи фиксируются в системе, все видят выполнение онлайн"]}, "ordoHints": {"marketing": ["Ordo помогает отслеживать, откуда приходят клиенты", "Ordo покажет, какой канал работает лучше", "Ordo считает юнит-экономику и конверсии автоматически", "Ordo анализирует каналы и автоматически масштабирует рабочие — без ручного анализа", "Ordo строит воронки и тестирует гипотезы — вы видите результат, не занимаясь аналитикой"], "sales": ["Ordo даст CRM и скрипт первого контакта", "Ordo замеряет конверсию на каждом этапе", "Ordo автоматизирует воронку и напоминает о заявках", "Ordo автоматизирует CRM, назначает задачи менеджерам и прогнозирует выручку", "Ordo масштабирует отдел продаж — каждый менеджер работает по единой системе"], "product": ["Ordo оцифрует процесс и устранит возвраты", "Ordo даёт УТП: родители видят развитие ребёнка онлайн", "Ordo усиливает лояльность через электронный дневник", "Ordo добавляет интерактивные уроки и анализ развития ребёнка — ваше УТП растёт", "Ordo превращает продукт в самостоятельный канал привлечения клиентов"], "service": ["Ordo устраняет жалобы через прозрачность для родителей", "Ordo автоматически уведомляет родителей о посещении", "Ordo даёт NPS-инструменты и историю обращений", "Ordo автоматизирует NPS, опросы родителей и сбор обратной связи", "Ordo строит полную карту клиентского пути и предотвращает отток"], "finance": ["Ordo ведёт ДДС автоматически без таблиц", "Ordo предупреждает о разрывах и считает рентабельность", "Ordo автоматизирует ОПУ, бюджет и платёжный календарь", "Ordo строит финансовые модели и заранее предупреждает о кассовых разрывах", "Ordo даёт директору полный финансовый контроль в реальном времени"], "management": ["Ordo даст структуру: каждый знает свои задачи", "«Директор AI» — все показатели на одном экране", "Ordo автоматизирует отчётность и еженедельное планирование", "Ordo автоматизирует постановку задач и контроль KPI каждого сотрудника", "Ordo даёт операционному директору полный дашборд — ничего не теряется"], "legal": ["Ordo хранит все документы в цифре и напоминает о сроках", "Ordo формирует пакет к проверке автоматически", "Ordo снижает нагрузку на методиста через автоматизацию", "Ordo автоматически отслеживает сроки документов и напоминает об обновлениях", "Ordo формирует любой пакет документов в 1 клик — ноль ручной работы"], "hr": ["Ordo хранит все кадровые данные в цифре", "HR AI отслеживает KPI и мотивацию каждого сотрудника", "Ordo автоматизирует табели, графики и отпуска", "Ordo автоматизирует KPI, графики и начисление зарплат", "Ordo ведёт полный HR-учёт — директор видит каждого сотрудника онлайн"], "ltv": ["Ordo автоматизирует табели и перерасчёты при пропусках", "Родители получают удобные квитанции и историю платежей онлайн", "Ordo делает перерасчёты за 1 секунду вместо часа", "Ordo автоматически рассчитывает перерасчёты и отправляет квитанции родителям", "Ordo объединяет табели, платежи и аналитику посещаемости в одном месте"], "teacher": ["Ordo даёт 10 000+ готовых уроков — педагог работает по платформе", "Ordo стандартизирует процесс независимо от педагога", "Методист проверяет планы и отчёты автоматически", "Ordo даёт методисту инструменты контроля качества каждого педагога онлайн", "Ordo полностью автоматизирует процесс — стандарт независим от конкретного педагога"], "cook": ["Ordo поможет стандартизировать питание и устранить жалобы родителей", "Ordo даёт готовые меню по нормам и контролирует закупки", "Ordo автоматически ведёт меню, закупки и склад в одной системе", "Ordo позволяет родителям видеть рацион ребёнка онлайн — повышает доверие", "Ordo полностью автоматизирует питание: меню, нормы, закупки и склад"], "nanny": ["Ordo помогает структурировать работу няни и устранить хаос", "Ordo даёт чек-листы и позволяет директору видеть выполнение задач", "Ordo переводит все задачи в цифровой формат с отчётностью", "Ordo даёт родителям прозрачность — они видят уход за ребёнком онлайн", "Ordo полностью оцифровывает работу няни — ноль бумажной работы"]}, "tasks": {"marketing": ["Определить 1–2 рабочих канала и сфокусироваться", "Поставить UTM-метки, чтобы знать откуда приходят клиенты", "Запустить таргет на 1 конкретный сегмент"], "sales": ["Написать скрипт первого контакта в WhatsApp", "Ввести пробный день как стандарт воронки", "Назначить ответственного за заявки — не владелец"], "product": ["Провести custdev с 5–7 клиентами: почему ходят именно к вам", "Сформулировать УТП в одно предложение", "Добавить программу, которой нет у конкурентов"], "service": ["Позвонить 3 клиентам, которые ушли, и спросить причину", "Ввести стандарт реакции на жалобу — ответ за 2 часа", "Раз в месяц собирать обратную связь письменно"], "finance": ["Начать вести ДДС ежедневно", "Разделить личные и рабочие счета", "Считать рентабельность хотя бы раз в месяц"], "management": ["Написать должностные инструкции для каждого", "Внедрить еженедельную планёрку", "Ставить все задачи письменно, не устно"], "legal": ["Собрать все действующие договоры в одну папку", "Составить чек-лист к плановой проверке", "Проконсультироваться с юристом по текущим рискам"], "hr": ["Оформить трудовые договоры на всех сотрудников", "Создать электронный табель сотрудников", "Прописать мотивационную сетку: оклад + переменная часть"], "ltv": ["Начать вести табель посещаемости электронно", "Звонить клиентам, кто не пришёл 2+ недели подряд", "Ввести систему перерасчётов при пропусках"], "teacher": ["Прописать требования к педагогу: мягкие и твёрдые навыки", "Подключить педагогов к платформе с готовыми уроками", "Нанять казахоязычного специалиста — основной запрос рынка"], "cook": ["Составить цикличное меню на 2 недели по нормам", "Завести журнал закупок продуктов электронно", "Разработать чек-лист приёмки и хранения продуктов"], "nanny": ["Составить ежедневный чек-лист для няни", "Ввести фотофиксацию уборки и выполнения задач", "Разработать инструкцию по уходу за детьми"]}}, "kz": {"names": {"marketing": "Маркетинг", "sales": "Сату", "product": "Өнім", "service": "Қызмет", "finance": "Қаржы", "management": "Басқару", "legal": "Заңдық қорғау", "hr": "Кадрлық қорғау", "ltv": "Ұстап қалу (LTV)", "teacher": "Педагог", "cook": "Аспаз", "nanny": "Бала күтуші"}, "hints": {"marketing": "Жаңа клиенттерді тарту", "sales": "Кіріс өтінімдерді жабу", "product": "УТП және клиент адалдығы", "service": "Шағымдармен жұмыс", "finance": "Есеп жүргізу және ақшаны басқару", "management": "Командаға және тапсырмаларға жетекшілік", "legal": "Құжаттар, шарттар, тексерулер", "hr": "Қызметкерлерді ресімдеу", "ltv": "Қатысу, төлемдер, қайта есеп", "teacher": "Стандарттар және білім беру процесі", "cook": "Тамақтану, мәзір, сатып алу, нормалар", "nanny": "Балаларды күту, жинау, режим"}, "tips": {"marketing": "<strong>Сату AI</strong> кабинеті клиент көздерін бақылайды және жарнама бойынша ұсыныстар береді.", "sales": "<strong>Сату AI</strong> CRM жүргізеді, өтінімдер туралы еске салады.", "product": "<strong>Баланың дамуын талдау</strong> — ата-аналар прогресті онлайн көреді. Бұл сіздің УТП-іңіз.", "finance": "<strong>Қаржы AI</strong> — ДДС, ОПУ, қайта есептер автоматты түрде.", "management": "<strong>Директор AI</strong> — барлық бөлімдер бойынша бірыңғай дашборд.", "legal": "<strong>Электрондық құжат айналымы</strong> — барлық шарттарды сандық форматта сақтайды.", "hr": "<strong>HR AI</strong> — жеке істер, KPI, мотивация цифрлы форматта.", "ltv": "<strong>Электрондық күнделік</strong> — табельдер, қайта есептер автоматты.", "service": "<strong>Коммуникация</strong> — ата-аналар хабарландырулар алады.", "teacher": "<strong>Тәрбиеші AI</strong> — мемлекеттік стандарт бойынша дайын сабақтар.", "cook": "<strong>Аспаз AI</strong> — мәзір, сатып алу және қойма байланыстырылған.", "nanny": "<strong>Бала күтуші AI</strong> — тапсырмалар, тізімдер, есептер цифрлы."}, "ordoSolve": {"marketing": "«Сату AI» — воронка, лидтер, аналитика бір экранда", "sales": "«Сату AI» — CRM, өтінімдер, еске салғыштар, скриптер", "product": "Электрондық күнделік + дамуды талдау — сіздің негізгі УТП-іңіз", "service": "Ата-ана кабинеті + коммуникациялар — шағымдарды азайтады", "finance": "«Қаржы AI» — ДДС, ОПУ, қайта есептер, төлем күнтізбесі", "management": "«Директор AI» — барлық көрсеткіштер бойынша нақты уақыт дашборды", "legal": "Электрондық құжат айналымы — тексеруге пакет 1 кликте", "hr": "«HR AI» — жеке істер, KPI, мотивация бақылауда", "ltv": "Электрондық журнал — табельдер және қайта есептер автоматты", "teacher": "«Тәрбиеші AI» — 3 тілде 10 000+ мемстандарт бойынша сабақ", "cook": "«Аспаз AI» — мәзір, сатып алу, қойма, нормалар автоматты", "nanny": "«Бала күтуші AI» — тапсырмалар, жинау, күту цифрлы форматта"}, "levels": {"marketing": ["Интернет-жарнама жоқ — тек ауызша жарнама мен ауданда хабарландырулар", "Материалдар бар, бірақ нәтиже жоқ", "Жарнамаға бюджет бар, клиент тартылады. Тиімділік өлшенбейді", "Жарнаманың тиімділігін түсінемін, юнит-экономика сәйкес келеді", "Маркетинг стратегиясы, гипотезаларды жүйелі тексеру"], "sales": ["Өзім сатамын, скрипт пен құрылым жоқ", "Персонал бар, қалай білсе солай жұмыс істейді. Өлшем — тек «қанша сатты»", "Сату скрипттері бар, негізгі конверсиялар өлшенеді", "CRM, жаңа/қайталама клиенттерге бөлу, апта сайынғы талдау", "Сату бөлімі дербес, жоспар 90% орындалады"], "product": ["Өнім көңілсіздік пен қайтаруларға алып келеді", "УТП жоқ, тұрақты оң пікірлер жоқ", "Клиенттер адал, үлкен бөлігі ұсыным бойынша келеді", "Айқын УТП — клиент бәсекелестерде жоқ нәрсе алады", "Өнімнің өзі маркетингсіз өсімді қозғайды"], "service": ["Қайтарулар >10%, интернетте теріс пікірлер", "Қайтарулар 5–10%, әр жағдайға жеке жауап беріледі", "Қайтарулар <5%, шағымдармен жауапты тұлға бар", "NPS өлшенеді, сервис қызметі жүйелі жұмыс істейді", "Клиент жолының картасы, барлық сапа метрикалары"], "finance": ["Кассалық олқылықтар, ақша қайда кететінін түсінбеймін", "Негізгі кестелер бар, бірақ шешімдерді интуитивті қабылдаймын", "ДДС және төлем күнтізбесін жүргіземін, олқылықтар жоқ", "ОПУ және Баланс, бюджет, есеп автоматтандырылған", "Қаржылық модельдеу, қаржы директоры штатта"], "management": ["Қолмен басқару, бәрі маған байланысты", "Жауапкершілік аймақтары бар, тапсырмаларды жазбаша беремін", "Апта сайынғы жоспарлау, күнделікті көрсеткіш есебі", "Тапсырмалар жүйеде, бизнес-процестер сипатталған", "Операциялық директор бар, иесі тек стратегия деңгейінде"], "legal": ["Құжаттарда қателер бар немесе жоқ, кез келген тексеру — айыппұл", "Шарттар папкаларда, тексеруге дайындық тек «визит алдында»", "Заңгер мен әдіскер қажет, қолдау еңбекті талап етеді", "Әдіскер бақылауы бар, бірақ директор көп ресурс жұмсайды", "Барлық құжаттар цифрлы, тексеруге пакет 1 кликте"], "hr": ["Шартсыз қызметкерлер, ауысым жоғары, жанжалдар", "Еңбек шарттары жасалады, бірақ бәрі қағаз папкаларда", "Кадрлық деректер Excel-де: демалыстар, кестелер, табельдер", "Бөлек HR қажет, жүктеме артады", "Барлық жеке істер цифрлы, KPI және мотивация жүйеде"], "ltv": ["Табельдер қағазда, чексіз қолма-қол төлемдер, қайта есеп қателері", "Ведомостар папкаларда, қайта есеп қолмен", "Excel/Google Sheets-те есеп, базалық ашықтық", "Бухгалтер қажет, құжаттар көлемі артады", "Табельдер, қайта есеп және төлемдер автоматты бір жүйеде"], "teacher": ["Педагогке үлкен тәуелділік, стандарт жоқ. Кетсе — процесс бұзылады", "Лауазымдық нұсқаулар бар, бірақ бақылау қолмен, есеп ауызша", "Жоспарлар Word/Excel-де, әдіскер кешіктіріп тексереді", "Әдіскер бақылауы бар, бірақ директор көп ресурс жұмсайды", "Процесс толық цифрланды — ата-аналар мен директор аналитиканы онлайн көреді"], "cook": ["Тамақтану хаотты, мәзір жоқ, ата-аналардың шағымдары", "Мәзір пайда болды, бірақ бәрі қағазда. Бақылау жүйесіз", "Тамақтану жүйеленді, бірақ директордың тұрақты тексеруін талап етеді", "Ішінара автоматтандыру, аспаз нормалар бойынша жұмыс істейді", "Тамақтану толық автоматтандырылды: мәзір, сатып алу және қойма байланыстырылды"], "nanny": ["Міндеттер анықталмаған, жұмыс хаотты", "Тапсырмалар ресімделген, бірақ орындалуы жүйелі тексерілмейді", "Тізімдер Excel-де, деректер шашыраңқы", "Ресми жұмыс істейді, бірақ қосымша әкімшілер қажет", "Тапсырмалар жүйеде тіркеледі, барлығы орындалуды онлайн көреді"]}, "ordoHints": {"marketing": ["Ordo клиенттердің қайдан келетінін бақылауға көмектеседі", "Ordo қай арна жақсы жұмыс істейтінін көрсетеді", "Ordo юнит-экономика мен конверсияларды автоматты есептейді", "Ordo арналарды талдайды және жұмыс істейтіндерін автоматты масштабтайды", "Ordo воронкалар жасайды және гипотезаларды тестілейді — сіз нәтижені көресіз"], "sales": ["Ordo CRM және бірінші байланыс скриптін береді", "Ordo әр кезеңдегі конверсияны өлшейді", "Ordo воронканы автоматтандырады және өтінімдер туралы еске салады", "Ordo CRM-ді автоматтандырады, тапсырмалар тағайындайды және табысты болжайды", "Ordo сату бөлімін масштабтайды — әр менеджер бірыңғай жүйе бойынша жұмыс істейді"], "product": ["Ordo процесті цифрландырады және қайтаруларды жояды", "Ordo УТП береді: ата-аналар баланың дамуын онлайн көреді", "Ordo электрондық күнделік арқылы адалдықты нығайтады", "Ordo интерактивті сабақтар мен дамуды талдауды қосады — УТП өседі", "Ordo өнімді өзіндік тарту каналына айналдырады"], "service": ["Ordo ата-аналарға ашықтық арқылы шағымдарды жояды", "Ordo ата-аналарды автоматты хабарландырады", "Ordo NPS-құралдарды және өтінімдер тарихын береді", "Ordo NPS, ата-аналар сауалнамасын және кері байланысты автоматтандырады", "Ordo клиент жолының картасын жасайды және кетуді болдырмайды"], "finance": ["Ordo ДДС-ті кестесіз автоматты жүргізеді", "Ordo олқылықтар туралы ескертеді және рентабельділікті есептейді", "Ordo ОПУ, бюджет және төлем күнтізбесін автоматтандырады", "Ordo қаржылық модельдер жасайды және кассалық олқылықтарды алдын ала болжайды", "Ordo директорға нақты уақытта толық қаржылық бақылауды береді"], "management": ["Ordo құрылым береді: әр адам тапсырмасын біледі", "«Директор AI» — барлық көрсеткіштер бір экранда", "Ordo есептемені және апта сайынғы жоспарлауды автоматтандырады", "Ordo тапсырмалар қоюды және KPI бақылауын автоматтандырады", "Ordo операциялық директорға толық дашборд береді — ештеңе жоғалмайды"], "legal": ["Ordo барлық құжаттарды цифрлы сақтайды және мерзімдер туралы еске салады", "Ordo тексеруге пакетті автоматты қалыптастырады", "Ordo автоматтандыру арқылы әдіскердің жүктемесін азайтады", "Ordo құжаттар мерзімдерін автоматты бақылайды және жаңарту туралы еске салады", "Ordo кез келген құжат пакетін 1 кликте қалыптастырады"], "hr": ["Ordo барлық кадрлық деректерді цифрлы сақтайды", "HR AI әр қызметкердің KPI мен мотивациясын бақылайды", "Ordo табельдер, кестелер және демалыстарды автоматтандырады", "Ordo KPI, кестелер мен жалақы есебін автоматтандырады", "Ordo толық HR есебін жүргізеді — директор әр қызметкерді онлайн көреді"], "ltv": ["Ordo табельдер мен қайта есепті автоматтандырады", "Ата-аналар ыңғайлы квитанциялар мен төлемдер тарихын онлайн алады", "Ordo қайта есепті 1 секундта жасайды", "Ordo автоматты қайта есептейді және ата-аналарға квитанциялар жібереді", "Ordo табельдерді, төлемдерді және қатысу аналитикасын бір жерде біріктіреді"], "teacher": ["Ordo 10 000+ дайын сабақ береді — педагог платформа бойынша жұмыс істейді", "Ordo процесті педагогтан тәуелсіз стандарттайды", "Әдіскер жоспарлар мен есептерді автоматты тексереді", "Ordo әдіскерге педагогтардың сапасын онлайн бақылауға мүмкіндік береді", "Ordo процесті толық автоматтандырады — стандарт нақты педагогтан тәуелсіз"], "cook": ["Ordo тамақтануды стандарттауға және ата-аналардың шағымдарын жоюға көмектеседі", "Ordo нормалар бойынша дайын мәзірлер береді және сатып алуларды бақылайды", "Ordo мәзір, сатып алу және қойманы бір жүйеде автоматты жүргізеді", "Ordo ата-аналарға баланың рационын онлайн көруге мүмкіндік береді", "Ordo тамақтануды толық автоматтандырады: мәзір, нормалар, сатып алу және қойма"], "nanny": ["Ordo бала күтушінің жұмысын құрылымдауға және хаосты жоюға көмектеседі", "Ordo тізімдер береді және директорға тапсырмалардың орындалуын көруге мүмкіндік береді", "Ordo барлық тапсырмаларды есептілігі бар цифрлы форматқа ауыстырады", "Ordo ата-аналарға ашықтық береді — олар баланың күтімін онлайн көреді", "Ordo бала күтушінің жұмысын толық цифрландырады — қағаз жұмысы нөл"]}, "tasks": {"marketing": ["1–2 жұмыс арнасын анықтап, фокусталу", "UTM-тегтерін орнату — клиенттер қайдан келетінін білу", "1 нақты сегментке таргет іске қосу"], "sales": ["WhatsApp-та бірінші байланыс скриптін жазу", "Сынақ күнін воронка стандарты ретінде енгізу", "Өтінімдер жауаптысын тағайындау — иесі емес"], "product": ["5–7 клиентпен custdev өткізу: неге тек сізге келеді", "УТП-ді бір сөйлеммен тұжырымдау", "Бәсекелестерде жоқ бағдарлама қосу"], "service": ["Кеткен 3 клиентке қоңырау шалып, себебін сұрау", "Шағымға жауап стандартын енгізу — 2 сағат ішінде", "Айына бір рет жазбаша кері байланыс жинау"], "finance": ["ДДС-ті күнделікті жүргізе бастау", "Жеке және жұмыс шоттарын бөлу", "Рентабельділікті айына кем дегенде бір рет есептеу"], "management": ["Әр қызметкер үшін лауазымдық нұсқаулама жазу", "Апта сайынғы жоспарлаушы енгізу", "Барлық тапсырмаларды жазбаша беру, ауызша емес"], "legal": ["Барлық шарттарды бір папкаға жинау", "Жоспарлы тексеруге тізім жасау", "Ағымдағы тәуекелдер бойынша заңгермен кеңесу"], "hr": ["Барлық қызметкерлерге еңбек шарты жасау", "Электрондық табель жасау", "Мотивациялық торды жасау: оклад + өзгермелі бөлік"], "ltv": ["Қатысу табелін электронды жүргізе бастау", "2+ апта қатарынан келмеген клиенттерге қоңырау шалу", "Босату кезінде қайта есеп жүйесін енгізу"], "teacher": ["Педагогке талаптар жазу: жұмсақ және қатты дағдылар", "Педагогтарды платформаға дайын сабақтармен қосу", "Қазақ тілінде маман жалдау — нарықтың негізгі сұранысы"], "cook": ["Нормалар бойынша 2 аптаға циклдік мәзір жасау", "Өнім сатып алу журналын электронды жүргізу", "Тауарды қабылдау және сақтау тізімін жасау"], "nanny": ["Бала күтушіге күнделікті тізім жасау", "Жинауды және тапсырмалардың орындалуын фотоға түсіру", "Әр жастағы балаларды күту нұсқауламасын жасау"]}}, "uz": {"names": {"marketing": "Marketing", "sales": "Sotuv", "product": "Mahsulot", "service": "Servis", "finance": "Moliya", "management": "Boshqaruv", "legal": "Huquqiy himoya", "hr": "Kadrlar himoyasi", "ltv": "Ushlab qolish (LTV)", "teacher": "Pedagog", "cook": "Oshpaz", "nanny": "Enaga"}, "hints": {"marketing": "Yangi mijozlarni jalb qilish", "sales": "Kiruvchi so'rovlarni yopish", "product": "USP va mijoz sadoqati", "service": "Shikoyatlar va qaytarishlar bilan ishlash", "finance": "Hisobga olish va pulni boshqarish", "management": "Jamoa va vazifalarni boshqarish", "legal": "Hujjatlar, shartnomalar, tekshiruvlar", "hr": "Xodimlarni rasmiylashtirish va tashvish", "ltv": "Davomat, to'lovlar, qayta hisob-kitob", "teacher": "Standartlar va ta'lim jarayoni", "cook": "Ovqatlanish, menyu, xaridlar, me'yorlar", "nanny": "Bolalarni parvarish qilish, tozalash, tartib"}, "tips": {"marketing": "<strong>Sotuv AI</strong> kabineti mijoz manbalarini kuzatadi va reklama bo'yicha tavsiyalar beradi.", "sales": "<strong>Sotuv AI</strong> CRM yuritadi, so'rovlar haqida eslatadi.", "product": "<strong>Bolaning rivojlanishini tahlil qilish</strong> — ota-onalar progressni onlayn ko'radi. Bu sizning USP-ingiz.", "finance": "<strong>Moliya AI</strong> — DDC, OPU, qayta hisoblar avtomatik ravishda.", "management": "<strong>Direktor AI</strong> — barcha bo'limlar bo'yicha yagona dashboard.", "legal": "<strong>Elektron hujjat aylanmasi</strong> — barcha shartnomalarni raqamli saqlaydi.", "hr": "<strong>HR AI</strong> — shaxsiy ishlar, KPI, motivatsiya raqamli formatda.", "ltv": "<strong>Elektron kundalik</strong> — tabellar, qayta hisoblar avtomatik.", "service": "<strong>Kommunikatsiyalar</strong> — ota-onalar bildirishnomalar oladi.", "teacher": "<strong>Tarbiyachi AI</strong> — davlat standarti bo'yicha tayyor darslar.", "cook": "<strong>Oshpaz AI</strong> — menyu, xaridlar va ombor bog'langan.", "nanny": "<strong>Enaga AI</strong> — vazifalar, ro'yxatlar, hisobotlar raqamli."}, "ordoSolve": {"marketing": "«Sotuv AI» — voronka, lidlar, tahlil bitta ekranda", "sales": "«Sotuv AI» — CRM, so'rovlar, eslatmalar, skriptlar", "product": "Elektron kundalik + rivojlanishni tahlil qilish — sizning asosiy USP-ingiz", "service": "Ota-ona kabineti + kommunikatsiyalar — shikoyatlarni kamaytiradi", "finance": "«Moliya AI» — DDC, OPU, qayta hisoblar, to'lov kalendari", "management": "«Direktor AI» — barcha ko'rsatkichlar bo'yicha real vaqt dashboard", "legal": "Elektron hujjat aylanmasi — tekshiruv uchun paket 1 bosishda", "hr": "«HR AI» — shaxsiy ishlar, KPI, motivatsiya nazorat ostida", "ltv": "Elektron jurnal — tabellar va qayta hisoblar avtomatik", "teacher": "«Tarbiyachi AI» — 3 tilda 10 000+ davlat standarti bo'yicha darslar", "cook": "«Oshpaz AI» — menyu, xaridlar, ombor, me'yorlar avtomatik", "nanny": "«Enaga AI» — vazifalar, tozalash, bolalar parvarishi raqamli formatda"}, "levels": {"marketing": ["Internet-reklama yo'q — faqat og'zaki reklama va e'lonlar", "Materiallar bor, lekin natija yo'q", "Reklamaga byudjet bor, mijozlarni jalb qila olamiz. Samaradorlik o'lchanmaydi", "Reklama samaradorligini tushunaman, birlik iqtisodiyoti mos keladi", "Marketing strategiyasi, gipotezalarni tizimli sinash"], "sales": ["O'zim sotaman, skript va tuzilma yo'q", "Xodimlar bor, bilganicha ishlaydi. O'lchov — faqat «qancha sotdi»", "Sotuv skriptlari bor, asosiy konversiyalar o'lchanadi", "CRM, yangi/takroriy mijozlarga bo'lish, haftalik tahlil", "Sotuv bo'limi mustaqil, reja 90% hollarda bajariladi"], "product": ["Mahsulot hafsalasizlik va qaytarishlarga olib keladi", "USP yo'q, barqaror ijobiy sharhlar yo'q", "Mijozlar sodiq, katta qismi tavsiya orqali keladi", "Yorqin USP — mijoz raqobatchilarda yo'q narsani oladi", "Mahsulotning o'zi marketingsiz o'sishni harakatga keltiradi"], "service": ["Qaytarishlar >10%, internetda salbiy fikrlar", "Qaytarishlar 5–10%, har holga alohida javob beriladi", "Qaytarishlar <5%, shikoyatlar uchun mas'ul shaxs bor", "NPS o'lchanadi, servis xizmati tizimli ishlaydi", "Mijoz yo'lining xaritasi, barcha sifat metrikalari"], "finance": ["Kassa bo'shliqlari, pul qayerga ketayotganini tushunmayman", "Asosiy jadvallar bor, lekin qarorlarni intuitiv qabul qilaman", "DDC va to'lov kalendarini yuritaman, bo'shliqlar yo'q", "OPU va Balans, byudjetlash, hisob avtomatlashtirilgan", "Moliyaviy modellashtirish, moliya direktori shtatda"], "management": ["Qo'lda boshqaruv, hammasi menga bog'liq", "Mas'uliyat zonalari bor, vazifalarni yozma beraman", "Haftalik rejalashtirish, kundalik ko'rsatkichlar hisobi", "Vazifalar tizimda, biznes-jarayonlar tavsiflangan", "Operatsion direktor bor, egasi faqat strategiya darajasida"], "legal": ["Hujjatlarda xatolar bor yoki yo'q, har qanday tekshiruv — jarima", "Shartnomalar papkalarda, tekshiruvga tayyorgarlik faqat «tashrif oldidan»", "Yurist va metodist kerak, qo'llab-quvvatlash mehnat talab qiladi", "Metodist nazorati bor, lekin direktor ko'p resurs sarflaydi", "Barcha hujjatlar raqamli, tekshiruv uchun paket 1 bosishda"], "hr": ["Shartnomasiz xodimlar, tashvish yuqori, nizolar", "Mehnat shartnomalar tuziladi, lekin hammasi qog'oz papkalarda", "Kadrlar ma'lumotlari Excel-da: ta'tillar, jadvallar, tabellar", "Alohida HR kerak, ish yuki oshib boradi", "Barcha shaxsiy ishlar raqamli, KPI va motivatsiya tizimda"], "ltv": ["Tabellar qog'ozda, cheqsiz naqd to'lovlar, qayta hisob xatolari", "Vedomostlar papkalarda, qayta hisob qo'lda", "Excel/Google Sheets-da hisob, asosiy shaffoflik", "Buxgalter kerak, hujjatlar hajmi oshib boradi", "Tabellar, qayta hisoblar va to'lovlar avtomatik bitta tizimda"], "teacher": ["Pedagogga katta bog'liqlik, standart yo'q. Ketsa — jarayon buziladi", "Lavozim yo'riqnomalari bor, lekin nazorat qo'lda, hisobot og'zaki", "Rejalar Word/Excel-da, metodist kechikib tekshiradi", "Metodist nazorati bor, lekin direktor ko'p resurs sarflaydi", "Jarayon to'liq raqamlashtirildi — ota-onalar va direktor tahlilni onlayn ko'radi"], "cook": ["Ovqatlanish tartibsiz, menyu yo'q, ota-onalar shikoyatlari", "Menyu paydo bo'ldi, lekin hammasi qog'ozda. Nazorat tartibsiz", "Ovqatlanish tizimi tartibga solingan, lekin doimiy tekshiruv talab qiladi", "Qisman avtomatlash, oshpaz me'yorlar bo'yicha ishlaydi", "Ovqatlanish to'liq avtomatlashtirildi: menyu, xaridlar va ombor bog'langan"], "nanny": ["Vazifalar aniqlanmagan, ish tartibsiz", "Vazifalar rasmiylashtirilib, lekin bajarilishi tizimli tekshirilmaydi", "Ro'yxatlar Excel-da, ma'lumotlar tarqoq", "Rasmiy ishlaydi, lekin qo'shimcha ma'murlar kerak", "Vazifalar tizimda qayd etiladi, hammasi bajarilishni onlayn ko'radi"]}, "ordoHints": {"marketing": ["Ordo mijozlar qayerdan kelishini kuzatishga yordam beradi", "Ordo qaysi kanal yaxshi ishlashini ko'rsatadi", "Ordo birlik iqtisodiyoti va konversiyalarni avtomatik hisoblaydi", "Ordo kanallarni tahlil qiladi va ishlaydiganlarini avtomatik kengaytiradi", "Ordo voronkalar quradi va gipotezalarni sinovdan o'tkazadi — siz natijani ko'rasiz"], "sales": ["Ordo CRM va birinchi aloqa skriptini beradi", "Ordo har bosqichdagi konversiyani o'lchaydi", "Ordo voronkani avtomatlashtiradi va so'rovlar haqida eslatadi", "Ordo CRM-ni avtomatlaydi, vazifalar tayinlaydi va daromadni bashorat qiladi", "Ordo sotuv bo'limini kengaytiradi — har bir menejer yagona tizim bo'yicha ishlaydi"], "product": ["Ordo jarayonni raqamlaydi va qaytarishlarni bartaraf etadi", "Ordo USP beradi: ota-onalar bolaning rivojlanishini onlayn ko'radi", "Ordo elektron kundalik orqali sodiqlikni mustahkamlaydi", "Ordo interaktiv darslar va rivojlanish tahlilini qo'shadi — USP o'sadi", "Ordo mahsulotni mustaqil jalb kanaliga aylantiradi"], "service": ["Ordo shaffoflik orqali ota-onalar shikoyatlarini bartaraf etadi", "Ordo ota-onalarni avtomatik xabardor qiladi", "Ordo NPS-vositalar va murojaatlar tarixini beradi", "Ordo NPS, ota-onalar so'rovnomasini va fikr-mulohazalarni avtomatlaydi", "Ordo mijoz yo'lining xaritasini quradi va ketishni oldini oladi"], "finance": ["Ordo DDC-ni jadvalarsiz avtomatik yuritadi", "Ordo bo'shliqlar haqida ogohlantiradi va rentabellikni hisoblaydi", "Ordo OPU, byudjet va to'lov kalendarini avtomatlashtiradi", "Ordo moliyaviy modellar quradi va kassa bo'shliqlarini oldindan bashorat qiladi", "Ordo direktorga real vaqtda to'liq moliyaviy nazoratni ta'minlaydi"], "management": ["Ordo tuzilma beradi: har kim vazifasini biladi", "«Direktor AI» — barcha ko'rsatkichlar bitta ekranda", "Ordo hisobotni va haftalik rejalashtirish avtomatlashtiradi", "Ordo vazifalar qo'yishni va KPI nazoratini avtomatlaydi", "Ordo operatsion direktora to'liq dashboard beradi — hech narsa yo'qolmaydi"], "legal": ["Ordo barcha hujjatlarni raqamli saqlaydi va muddatlar haqida eslatadi", "Ordo tekshiruv uchun paketni avtomatik shakllantiradi", "Ordo avtomatlashtirish orqali metodist yukini kamaytiradi", "Ordo hujjatlar muddatlarini avtomatik kuzatadi va yangilash haqida eslatadi", "Ordo istalgan hujjatlar paketini 1 bosishda shakllantiradi"], "hr": ["Ordo barcha kadrlar ma'lumotlarini raqamli saqlaydi", "HR AI har xodimning KPI va motivatsiyasini kuzatadi", "Ordo tabellar, jadvallar va ta'tillarni avtomatlashtiradi", "Ordo KPI, jadvallar va ish haqi hisob-kitobini avtomatlaydi", "Ordo to'liq HR hisobini yuritadi — direktor har bir xodimni onlayn ko'radi"], "ltv": ["Ordo tabellar va qayta hisobni avtomatlashtiradi", "Ota-onalar qulay kvitansiyalar va to'lovlar tarixini onlayn oladi", "Ordo qayta hisobni 1 soniyada bajaradi", "Ordo avtomatik qayta hisoblaydi va ota-onalarga kvitansiyalar yuboradi", "Ordo tabellar, to'lovlar va davomat tahlilini bir joyda birlashtiradi"], "teacher": ["Ordo 10 000+ tayyor darslar beradi — pedagog platforma bo'yicha ishlaydi", "Ordo jarayonni pedagogdan mustaqil standartlashtiradi", "Metodist rejalar va hisobotlarni avtomatik tekshiradi", "Ordo metodistga har bir pedagogning sifatini onlayn nazorat qilish imkonini beradi", "Ordo jarayonni to'liq avtomatlaydi — standart muayyan pedagogga bog'liq emas"], "cook": ["Ordo ovqatlanishni standartlashga va ota-onalar shikoyatlarini bartaraf etishga yordam beradi", "Ordo me'yorlar bo'yicha tayyor menyular beradi va xaridlarni nazorat qiladi", "Ordo menyu, xaridlar va ombor bitta tizimda avtomatik yuritiladi", "Ordo ota-onalarga bolaning ratsionini onlayn ko'rish imkonini beradi", "Ordo ovqatlanishni to'liq avtomatlaydi: menyu, me'yorlar, xaridlar va ombor"], "nanny": ["Ordo enaganing ishini tuzilmalashtirish va tartibsizlikni bartaraf etishga yordam beradi", "Ordo ro'yxatlar beradi va direktorga vazifalar bajarilishini ko'rish imkonini beradi", "Ordo barcha vazifalarni hisobotli raqamli formatga o'tkazadi", "Ordo ota-onalarga shaffoflik beradi — ular bolaning parvarishini onlayn ko'radi", "Ordo enaganing ishini to'liq raqamlashtiradi — qog'oz ishi nol"]}, "tasks": {"marketing": ["1–2 ishlaydigan kanal aniqlash va ularga e'tibor qaratish", "UTM-teglarini o'rnatish — mijozlar qayerdan kelishini bilish", "1 aniq segmentga target ishga tushirish"], "sales": ["WhatsApp-da birinchi aloqa skriptini yozish", "Sinov kunini voronka standarti sifatida joriy etish", "So'rovlar uchun mas'ul tayinlash — egasi emas"], "product": ["5–7 mijoz bilan custdev o'tkazish: nega aynan sizga keladi", "USP-ni bitta gapda ifodalash", "Raqobatchilarda yo'q dastur qo'shish"], "service": ["Ketgan 3 mijozga qo'ng'iroq qilish va sababini so'rash", "Shikoyatga javob standartini joriy etish — 2 soat ichida", "Oyiga bir marta yozma fikr-mulohaza yig'ish"], "finance": ["DDC-ni har kuni yuritishni boshlash", "Shaxsiy va ish hisoblarini ajratish", "Rentabellikni kamida oyiga bir marta hisoblash"], "management": ["Har bir xodim uchun lavozim yo'riqnomasi yozish", "Haftalik yig'ilish joriy etish", "Barcha vazifalarni yozma berish, og'zaki emas"], "legal": ["Barcha amaliy shartnomalarni bitta papkaga yig'ish", "Rejalashtirilgan tekshiruv uchun tekshiruv ro'yxati tuzish", "Joriy xatarlar bo'yicha yurist bilan maslahatlashish"], "hr": ["Barcha xodimlarga mehnat shartnomasini rasmiylashtirish", "Elektron tabel yaratish", "Motivatsion tizim: maosh + o'zgaruvchan qism"], "ltv": ["Davomat tabelini elektron yuritishni boshlash", "2+ hafta ketma-ket kelmagan mijozlarga qo'ng'iroq qilish", "Sababsiz qoldirishda qayta hisob tizimini joriy etish"], "teacher": ["Pedagogga talablar yozish: yumshoq va qattiq ko'nikmalar", "Pedagoglarni tayyor darslar bilan platformaga ulash", "O'zbek tilida mutaxassis yollash — bozorning asosiy talabi"], "cook": ["Me'yorlar bo'yicha 2 haftalik tsiklik menyu tuzish", "Mahsulot xaridlari jurnalini elektron yuritish", "Mahsulotlarni qabul qilish va saqlash tekshiruv ro'yxatini ishlab chiqish"], "nanny": ["Enaga uchun kundalik tekshiruv ro'yxati tuzish", "Tozalash va vazifalar bajarilishini fotoga olish", "Har yoshdagi bolalarni parvarish qilish yo'riqnomasini ishlab chiqish"]}}, "kg": {"names": {"marketing": "Маркетинг", "sales": "Сатуу", "product": "Продукт", "service": "Сервис", "finance": "Каржы", "management": "Башкаруу", "legal": "Юридикалык коргоо", "hr": "Кадрлык коргоо", "ltv": "Кармоо (LTV)", "teacher": "Педагог", "cook": "Ашпозчу", "nanny": "Бала карачы"}, "hints": {"marketing": "Жаңы кардарларды тартуу", "sales": "Кирүүчү өтүнүчтөрдү жабуу", "product": "УТП жана кардар берилгендиги", "service": "Даттанууларды жана кайтарымдарды чечүү", "finance": "Эсеп жана акчаны башкаруу", "management": "Команда жана тапшырмаларды башкаруу", "legal": "Документтер, келишимдер, текшерүүлөр", "hr": "Кызматкерлерди каттоо жана алмашуу", "ltv": "Катышуу, төлөмдөр, кайра эсеп", "teacher": "Стандарттар жана билим берүү процесси", "cook": "Тамактануу, меню, сатып алуу, нормалар", "nanny": "Балаларды кароо, жыйноо, тартип"}, "tips": {"marketing": "<strong>Сатуу AI</strong> кабинети кардар булактарын байкайт жана жарнама боюнча сунуштар берет.", "sales": "<strong>Сатуу AI</strong> CRM жүргүзөт, өтүнүчтөр жөнүндө эскертет.", "product": "<strong>Баланын өнүгүүсүн талдоо</strong> — ата-энелер прогрессти онлайн көрөт. Бул сиздин УТП-иңиз.", "finance": "<strong>Каржы AI</strong> — ДДС, ОПУ, кайра эсептер автоматтык.", "management": "<strong>Директор AI</strong> — бардык бөлүмдөр боюнча бирдиктүү дашборд.", "legal": "<strong>Электрондук документ айлануу</strong> — бардык келишимдерди санариптик сакталат.", "hr": "<strong>HR AI</strong> — жеке иштер, KPI, мотивация санариптик форматта.", "ltv": "<strong>Электрондук күндөлүк</strong> — табельдер, кайра эсептер автоматтык.", "service": "<strong>Коммуникациялар</strong> — ата-энелер билдирүүлөр алышат.", "teacher": "<strong>Тарбиячы AI</strong> — мамлекеттик стандарт боюнча даяр сабактар.", "cook": "<strong>Ашпозчу AI</strong> — меню, сатып алуу жана кам байланышкан.", "nanny": "<strong>Бала карачы AI</strong> — тапшырмалар, тизимдер, отчеттор санариптик."}, "ordoSolve": {"marketing": "«Сатуу AI» — воронка, лидтер, аналитика бир экранда", "sales": "«Сатуу AI» — CRM, өтүнүчтөр, эскертмелер, скриптер", "product": "Электрондук күндөлүк + өнүгүүнү талдоо — сиздин негизги УТП-иңиз", "service": "Ата-эне кабинети + коммуникациялар — даттанууларды азайтат", "finance": "«Каржы AI» — ДДС, ОПУ, кайра эсептер, төлөм календары", "management": "«Директор AI» — бардык көрсөткүчтөр боюнча реалдуу убакыт дашборду", "legal": "Электрондук документ айлануу — текшерүүгө пакет 1 басуу менен", "hr": "«HR AI» — жеке иштер, KPI, мотивация контролдо", "ltv": "Электрондук журнал — табельдер жана кайра эсептер автоматтык", "teacher": "«Тарбиячы AI» — 3 тилде 10 000+ мамстандарт боюнча сабактар", "cook": "«Ашпозчу AI» — меню, сатып алуу, кам, нормалар автоматтык", "nanny": "«Бала карачы AI» — тапшырмалар, жыйноо, күтүм санариптик форматта"}, "levels": {"marketing": ["Интернет-жарнама жок — жалаң ооздон-оозго жана жарыялар", "Материалдар бар, бирок натыйжасы жок", "Жарнамага бюджет бар, кардар тартылат. Эффективдүүлүк өлчөнбөйт", "Жарнаманын эффективдүүлүгүн түшүнөм, юнит-экономика дал келет", "Маркетинг стратегиясы, гипотезаларды системалуу сыноо"], "sales": ["Өзүм сатам, скрипт жана түзүм жок", "Персонал бар, кандай билсе ошондой иштейт. Өлчөм — «канча сатты»", "Сатуу скриптери бар, негизги конверсиялар өлчөнөт", "CRM, жаңы/кайталама кардарларга бөлүү, жума сайын талдоо", "Сатуу бөлүмү өз алдынча, пландар 90% аткарылат"], "product": ["Продукт нааразылык жана кайтарымдарга алып келет", "УТП жок, туруктуу оң пикирлер жок", "Кардарлар берилген, чоң бөлүгү сунуш аркылуу келет", "Ачык УТП — кардар атаандаштарда жок нерсе алат", "Продукттун өзү маркетингсиз өсүүнү кыймылга келтирет"], "service": ["Кайтарымдар >10%, интернетте терс пикирлер", "Кайтарымдар 5–10%, ар бир учурга өзүнчө жооп берилет", "Кайтарымдар <5%, даттанууларды иштетүүчү жооптуу бар", "NPS өлчөнөт, сервис кызматы системалуу иштейт", "Кардар жолунун картасы, бардык сапат метрикалары"], "finance": ["Кассалык олуктар, акча кайда кетип жатканын түшүнбөйм", "Негизги таблицалар бар, бирок чечимдерди интуитивдик кабыл алам", "ДДС жана төлөм календарын жүргүзөм, олуктар жок", "ОПУ жана Баланс, бюджетирование, эсеп автоматташтырылган", "Каржылык моделдөө, каржы директору штатта"], "management": ["Колу менен башкаруу, баары мага байланыштуу", "Жоопкерчилик зоналары бар, тапшырмаларды жазма берем", "Жума сайын пландаштыруу, күн сайын көрсөткүч эсебин жүргүзөм", "Тапшырмалар системада, бизнес-процесстер сүрөттөлгөн", "Операциялык директор бар, ээси жалаң стратегия деңгээлинде"], "legal": ["Документтерде каталар бар же жок, кандай текшерүү болсо айыппул", "Келишимдер папкаларда, текшерүүгө даярдык жалаң «визит алдында»", "Юрист жана методист керек, колдоо эмгекти талап кылат", "Методист контролу бар, бирок директор көп ресурс жумшайт", "Бардык документтер санариптик, текшерүүгө пакет 1 басуу менен"], "hr": ["Шартсыз кызматкерлер, алмашуу жогору, чыр-чатактар", "Эмгек келишимдери жасалат, бирок баары кагаз папкаларда", "Кадрлык маалыматтар Excel-да: өргүүлөр, графиктер, табельдер", "Өзүнчө HR керек, жүктөм өсүүдө", "Бардык жеке иштер санариптик, KPI жана мотивация системада"], "ltv": ["Табельдер кагазда, чексиз нак төлөмдөр, кайра эсеп каталары", "Ведомосттар папкаларда, кайра эсеп колу менен", "Excel/Google Sheets-та эсеп, негизги ачыктык", "Бухгалтер керек, документтер көлөмү өсүүдө", "Табельдер, кайра эсеп жана төлөмдөр автоматтык бир системада"], "teacher": ["Педагогго чоң көз-карандылык, стандарт жок. Кетсе — процесс бузулат", "Лайкымдык нускоолор бар, бирок контрол колу менен, отчет ооздон", "Пландар Word/Excel-да, методист кечиктирип текшерет", "Методист контролу бар, бирок директор көп ресурс жумшайт", "Процесс толук санариптик — ата-энелер жана директор аналитиканы онлайн көрөт"], "cook": ["Тамактануу хаотичный, меню жок, ата-энелердин даттануулары", "Меню пайда болду, бирок баары кагазда. Контрол тартипсиз", "Тамактануу системасы иретке келтирилди, бирок туруктуу текшерүүнү талап кылат", "Жарым-жартылай автоматташтыруу, ашпозчу нормалар боюнча иштейт", "Тамактануу толук автоматташтырылды: меню, сатып алуу жана кам байланышкан"], "nanny": ["Милдеттер аныкталбаган, иш хаотичный", "Тапшырмалар расмийлештирилген, аткарылышы системалуу текшерилбейт", "Тизимдер Excel-да, маалыматтар чачырандак", "Расмий иштейт, бирок кошумча администраторлор керек", "Тапшырмалар системада катталат, баары аткарылышты онлайн көрөт"]}, "ordoHints": {"marketing": ["Ordo кардарлар кайдан келерин байкоого жардам берет", "Ordo кайсы канал жакшы иштерин көрсөтөт", "Ordo юнит-экономика жана конверсияларды автоматтык эсептейт", "Ordo арналарды талдайт жана иштегендерин автоматтык масштабтайт", "Ordo воронкалар жасайт жана гипотезаларды тестилейт — сиз натыйжаны көрөсүз"], "sales": ["Ordo CRM жана биринчи байланыш скриптин берет", "Ordo ар баскычтагы конверсияны өлчөйт", "Ordo воронканы автоматташтырат жана өтүнүчтөр жөнүндө эскертет", "Ordo CRM-ди автоматташтырат, тапшырмалар дайындайт жана кирешени болжойт", "Ordo сатуу бөлүмүн масштабтайт — ар бир менеджер бирдиктүү система боюнча иштейт"], "product": ["Ordo процессти санариптейт жана кайтарымдарды жоёт", "Ordo УТП берет: ата-энелер баланын өнүгүүсүн онлайн көрөт", "Ordo электрондук күндөлүк аркылуу адалдыкты бекемдейт", "Ordo интерактивдүү сабактар жана өнүгүүнү талдоону кошот — УТП өсөт", "Ordo продуктуну өзүнчө тартуу каналына айлантат"], "service": ["Ordo ата-энелерге ачыктык аркылуу даттанууларды жоёт", "Ordo ата-энелерди автоматтык кабарлайт", "Ordo NPS-куралдарды жана өтүнүчтөр тарыхын берет", "Ordo NPS, ата-энелер сурамжылоосун жана пикирлерди автоматташтырат", "Ordo кардар жолунун картасын жасайт жана кетүүнү болтурбайт"], "finance": ["Ordo ДДС-ти жадвалсыз автоматтык жүргүзөт", "Ordo олуктар жөнүндө эскертет жана рентабелдүүлүктү эсептейт", "Ordo ОПУ, бюджет жана төлөм календарын автоматташтырат", "Ordo каржылык моделдерди жасайт жана кассалык олуктарды алдын ала болжойт", "Ordo директорго реалдуу убакытта толук каржылык контролду берет"], "management": ["Ordo түзүм берет: ар бир адам тапшырмасын билет", "«Директор AI» — бардык көрсөткүчтөр бир экранда", "Ordo отчётту жана жума сайынгы пландаштырууну автоматташтырат", "Ordo тапшырма коюуну жана KPI контролун автоматташтырат", "Ordo операциялык директорго толук дашборд берет — эч нерсе жоголбойт"], "legal": ["Ordo бардык документтерди санариптик сактайт жана мөөнөттөр жөнүндө эскертет", "Ordo текшерүүгө пакетти автоматтык калыптандырат", "Ordo автоматташтыруу аркылуу методисттин жүгүн азайтат", "Ordo документтер мөөнөттөрүн автоматтык көзөмөлдөйт жана жаңыртуу жөнүндө эскертет", "Ordo каалаган документтер пакетин 1 басуу менен калыптандырат"], "hr": ["Ordo бардык кадрлык маалыматтарды санариптик сактайт", "HR AI ар кызматкердин KPI жана мотивациясын байкайт", "Ordo табельдер, графиктер жана өргүүлөрдү автоматташтырат", "Ordo KPI, графиктер жана эмгек акы эсебин автоматташтырат", "Ordo толук HR эсебин жүргүзөт — директор ар бир кызматкерди онлайн көрөт"], "ltv": ["Ordo табельдер менен кайра эсепти автоматташтырат", "Ата-энелер ыңгайлуу квитанциялар жана төлөмдөр тарыхын онлайн алышат", "Ordo кайра эсепти 1 секундта жасайт", "Ordo автоматтык кайра эсептейт жана ата-энелерге квитанциялар жиберет", "Ordo табельдерди, төлөмдөрдү жана катышуу аналитикасын бир жерде бириктирет"], "teacher": ["Ordo 10 000+ даяр сабактарды берет — педагог платформа боюнча иштейт", "Ordo процессти педагогдон көз-карандысыз стандарттайт", "Методист пландарды жана отчеттордо автоматтык текшерет", "Ordo методистке педагогдордун сапатын онлайн контролдоого мүмкүндүк берет", "Ordo процессти толук автоматташтырат — стандарт белгилүү педагогдон көз-карандысыз"], "cook": ["Ordo тамактануunu стандарттоого жана ата-энелердин даттануularын жоюуга жардам берет", "Ordo нормалар боюнча даяр менюлар берет жана сатып алууларды контролдойт", "Ordo меню, сатып алуу жана камды бир системада автоматтык жүргүзөт", "Ordo ата-энелерге баланын рационун онлайн көрүүгө мүмкүндүк берет", "Ordo тамактануunu толук автоматташтырат: меню, нормалар, сатып алуу жана кам"], "nanny": ["Ordo бала карачынын ишин түзүмдөштүрүүгө жана хаосту жоюуга жардам берет", "Ordo тизимдер берет жана директорго тапшырмалардын аткарылышын көрүүгө мүмкүндүк берет", "Ordo бардык тапшырмаларды отчеттуу санариптик форматка которот", "Ordo ата-энелерге ачыктык берет — алар баланын күтүмүн онлайн көрөт", "Ordo бала карачынын ишин толук санариптик кылат — кагаз иши нөл"]}, "tasks": {"marketing": ["1–2 иштеген каналды аныктоо жана фокустануу", "UTM-тегдерин орнотуу — кардарлар кайдан келерин билүү", "1 конкреттүү сегментке таргет ишке киргизүү"], "sales": ["WhatsApp-та биринчи байланыш скриптин жазуу", "Сыноо күнүн воронка стандарты катары киргизүү", "Өтүнүчтөр жооптуусун дайындоо — ээси эмес"], "product": ["5–7 кардар менен custdev өткөрүү: эмне үчүн жалаң силерге келет", "УТП-ди бир сүйлөм менен тубаса кылуу", "Атаандаштарда жок программа кошуу"], "service": ["Кеткен 3 кардарга чалып, себебин сурануу", "Даттанууга жооп стандартын киргизүү — 2 саат ичинде", "Айына бир жолу жазма пикир чогултуу"], "finance": ["ДДС-ти күн сайын жүргүзүп баштоо", "Жеке жана жумуш эсептерин бөлүү", "Рентабелдүүлүктү айына кем дегенде бир жолу эсептөө"], "management": ["Ар бир кызматкер үчүн кызмат нускоосун жазуу", "Жума сайын пландаштыруу жыйын киргизүү", "Бардык тапшырмаларды жазма берүү, ооздон эмес"], "legal": ["Бардык аракеттеги келишимдерди бир папкага чогултуу", "Пландалган текшерүүгө тизме жасоо", "Учурдагы тобокелдиктер боюнча юрист менен кеңешүү"], "hr": ["Бардык кызматкерлерге эмгек келишимин жасоо", "Электрондук табель түзүү", "Мотивациялык тор: оклад + өзгөрмөлүү бөлүк"], "ltv": ["Катышуу табелин электрондук жүргүзүп баштоо", "2+ жума катары келбеген кардарларга чалуу", "Себепсиз өткөрүп жибергенде кайра эсеп системасын киргизүү"], "teacher": ["Педагогго талаптарды жазуу: жумшак жана катуу көндүмдөр", "Педагогдорду даяр сабактар менен платформага туташтыруу", "Кыргыз тилиндеги адисти жалдоо — рыноктун негизги суранышы"], "cook": ["Нормалар боюнча 2 жумалык циклдик меню түзүү", "Продукт сатып алуу журналын электрондук жүргүзүү", "Продуктуларды кабыл алуу жана сактоо тизмесин иштеп чыгуу"], "nanny": ["Бала карачыга күнүмдүк тизим түзүү", "Жыйноону жана тапшырмалардын аткарылышын сүрөткө тартуу", "Ар кандай жаштагы балаларды кароо нускоосун иштеп чыгуу"]}}, "tj": {"names": {"marketing": "Маркетинг", "sales": "Фурӯш", "product": "Маҳсулот", "service": "Хизматрасонӣ", "finance": "Молия", "management": "Идоракунӣ", "legal": "Ҳимояи ҳуқуқӣ", "hr": "Ҳимояи кадрӣ", "ltv": "Нигоҳдорӣ (LTV)", "teacher": "Педагог", "cook": "Ошпаз", "nanny": "Дояи кӯдак"}, "hints": {"marketing": "Ҷалб кардани мизоҷони нав", "sales": "Пӯшидани дархостҳои воридотӣ", "product": "USP ва садоқати мизоҷ", "service": "Кор бо шикоятҳо ва бозгаштҳо", "finance": "Ҳисобдорӣ ва идоракунии пул", "management": "Идоракунии гурӯҳ ва вазифаҳо", "legal": "Ҳуҷҷатҳо, шартномаҳо, тафтишотҳо", "hr": "Расмигардонии кормандон ва чарх", "ltv": "Иштирок, пардохтҳо, ҳисоби такрорӣ", "teacher": "Стандартҳо ва раванди таълим", "cook": "Ғизо, меню, хариди молҳо, меъёрҳо", "nanny": "Нигоҳубини кӯдакон, тозакунӣ, тартиб"}, "tips": {"marketing": "Кабинети <strong>Фурӯши AI</strong> манбаъҳои мизоҷонро пайгирӣ мекунад.", "sales": "<strong>Фурӯши AI</strong> CRM мебарад, дар бораи дархостҳо ёдовар мешавад.", "product": "<strong>Таҳлили рушди кӯдак</strong> — волидайн прогрессро онлайн мебинанд. Ин USP-и шумост.", "finance": "<strong>Молияи AI</strong> — DDC, OPU, ҳисобҳои такрорӣ ба таври автоматӣ.", "management": "<strong>Директори AI</strong> — дашборди ягона барои ҳамаи бахшҳо.", "legal": "<strong>Ҳуҷҷатгардонии электронӣ</strong> — ҳамаи шартномаҳоро рақамӣ нигоҳ медорад.", "hr": "<strong>HR AI</strong> — парвандаҳои шахсӣ, KPI, мотивация дар формати рақамӣ.", "ltv": "<strong>Рӯзномаи электронӣ</strong> — ҷадвалҳо, ҳисобҳои такрорӣ ба таври автоматӣ.", "service": "<strong>Коммуникатсияҳо</strong> — волидайн огоҳиномаҳо мегиранд.", "teacher": "<strong>Тарбиятгари AI</strong> — дарсҳои омода мувофиқи стандарти давлатӣ.", "cook": "<strong>Ошпази AI</strong> — меню, хариди молҳо ва анбор пайваст шудаанд.", "nanny": "<strong>Дояи кӯдак AI</strong> — вазифаҳо, рӯйхатҳо, ҳисоботҳо рақамӣ."}, "ordoSolve": {"marketing": "«Фурӯши AI» — воронка, лидҳо, таҳлил дар як экран", "sales": "«Фурӯши AI» — CRM, дархостҳо, ёдоварҳо, скриптҳо", "product": "Рӯзномаи электронӣ + таҳлили рушд — USP-и асосии шумо", "service": "Кабинети волидайн + коммуникатсияҳо — шикоятҳоро кам мекунад", "finance": "«Молияи AI» — DDC, OPU, ҳисобҳои такрорӣ, тақвими пардохт", "management": "«Директори AI» — дашборди вақти воқеӣ барои ҳамаи нишондиҳандаҳо", "legal": "Ҳуҷҷатгардонии электронӣ — бастаи тафтишот бо 1 клик", "hr": "«HR AI» — парвандаҳои шахсӣ, KPI, мотивация таҳти назорат", "ltv": "Журнали электронӣ — ҷадвалҳо ва ҳисобҳои такрорӣ ба таври автоматӣ", "teacher": "«Тарбиятгари AI» — зиёда аз 10 000 дарс дар 3 забон", "cook": "«Ошпази AI» — меню, хариди молҳо, анбор, меъёрҳо ба таври автоматӣ", "nanny": "«Дояи кӯдак AI» — вазифаҳо, тозакунӣ, нигоҳубин дар формати рақамӣ"}, "levels": {"marketing": ["Реклама дар интернет нест — танҳо реклама даҳонӣ ва эълонҳо", "Маводҳо ҳастанд, аммо натиҷа надоранд", "Буҷет барои реклама ҳаст, мизоҷон ҷалб мешаванд. Самаранокӣ санҷида намешавад", "Самаранокии рекламаро мефаҳмам, иқтисодиёти воҳид мувофиқ аст", "Стратегияи маркетинг, санҷиши системавии гипотезаҳо"], "sales": ["Худам мефурӯшам, скрипт ва сохтор нест", "Кормандон ҳастанд, тавони доранд кор мекунанд. Ченак — «чӣ қадар фурӯхт»", "Скриптҳои фурӯш ҳастанд, конверсияҳои асосӣ санҷида мешаванд", "CRM, тақсим ба мизоҷони нав/такрорӣ, таҳлили ҳафтагӣ", "Бахши фурӯш мустақил аст, нақша дар 90% ҳолатҳо иҷро мешавад"], "product": ["Маҳсулот боиси норизоятӣ ва баргашт мегардад", "USP нест, шарҳҳои мусбии устувор нест", "Мизоҷон содиқанд, қисми зиёди онҳо тавассути тавсия меоянд", "USP-и барҷаста — мизоҷ чизеро мегирад, ки рақибон надоранд", "Маҳсулот худаш бе маркетинг рушдро пеш мебарад"], "service": ["Баргаштҳо >10%, назарҳои манфӣ дар интернет", "Баргаштҳо 5–10%, ба ҳар ҳолат ҷудогона посух дода мешавад", "Баргаштҳо <5%, масъул барои шикоятҳо ҳаст", "NPS санҷида мешавад, хидмати мизоҷ системавӣ кор мекунад", "Харитаи роҳи мизоҷ, ҳамаи метрикаҳои сифат"], "finance": ["Шикофҳои касса, намефаҳмам пул куҷо мерафта бошад", "Ҷадвалҳои асосӣ ҳастанд, аммо қарорҳоро интуитивӣ қабул мекунам", "DDC ва тақвими пардохт мебарам, шикофҳо нест", "OPU ва Баланс, буҷетбандӣ, ҳисоб автоматизатсия шудааст", "Моделсозии молиявӣ, директори молия дар штат"], "management": ["Идоракунии дастӣ, ҳама ба ман вобаста аст", "Минтақаҳои масъулият ҳастанд, вазифаҳоро хаттӣ медиҳам", "Нақшакашии ҳафтагӣ, ҳисоби ҳаррӯзаи нишондиҳандаҳо", "Вазифаҳо дар система, равандҳои тиҷорат тавсиф шудаанд", "Директори операционӣ ҳаст, соҳиб танҳо дар сатҳи стратегия"], "legal": ["Дар ҳуҷҷатҳо хатоҳо ҳастанд ё нестанд, ҳар тафтишот ҷарима аст", "Шартномаҳо дар папкаҳо, омодагӣ танҳо «пеш аз ташриф»", "Ҳуқуқшунос ва методист лозим аст, дастгирӣ заҳматталаб аст", "Назорати методист ҳаст, аммо директор захираҳои зиёде сарф мекунад", "Ҳамаи ҳуҷҷатҳо рақамӣ, бастаи тафтишот бо 1 клик"], "hr": ["Кормандон бе шартнома, чарх баланд, низоъҳо", "Шартномаҳои меҳнатӣ тартиб дода мешаванд, аммо ҳама дар папкаҳои коғазӣ", "Маълумоти кадрӣ дар Excel: таътилҳо, ҷадвалҳо, табелҳо", "HR-и ҷудогона лозим аст, бор меафзояд", "Ҳамаи парвандаҳои шахсӣ рақамӣ, KPI ва мотивация дар система"], "ltv": ["Табелҳо дар коғаз, пардохтҳои нақдии бечек, хатоҳои ҳисоби такрорӣ", "Ведомостҳо дар папкаҳо, ҳисоби такрорӣ дастӣ", "Ҳисоб дар Excel/Google Sheets, шаффофияти асосӣ", "Ҳисобдор лозим аст, ҳаҷми ҳуҷҷатҳо меафзояд", "Табелҳо, ҳисобҳои такрорӣ ва пардохтҳо ба таври автоматӣ дар як система"], "teacher": ["Вобастагии зиёд аз педагог, стандарт нест. Агар равад — раванд вайрон мешавад", "Дастурҳои вазифавӣ ҳастанд, аммо назорат дастӣ, ҳисобот шифоҳӣ аст", "Нақшаҳо дар Word/Excel, методист бо таъхир санҷида мешавад", "Назорати методист ҳаст, аммо директор захираҳои зиёде сарф мекунад", "Раванд пурра рақамӣ шудааст — волидайн ва директор таҳлилро онлайн мебинанд"], "cook": ["Ғизо беназм аст, меню нест, шикоятҳои волидайн", "Меню пайдо шуд, аммо ҳама дар коғаз. Назорат бенизом", "Система ғизо тартиб ёфтааст, аммо назорати доимиро талаб мекунад", "Автоматизатсияи қисмӣ, ошпаз мувофиқи меъёрҳо кор мекунад", "Ғизо пурра автоматизатсия шудааст: меню, хариди молҳо ва анбор пайвастанд"], "nanny": ["Вазифаҳо муайян нестанд, кор беназм аст", "Вазифаҳо расмӣ шудаанд, аммо иҷро системавӣ санҷида намешавад", "Рӯйхатҳо дар Excel, маълумот парокандааст", "Расмӣ кор мекунад, аммо маъмурони иловагӣ лозим аст", "Вазифаҳо дар система сабт мешаванд, ҳама иҷроро онлайн мебинанд"]}, "ordoHints": {"marketing": ["Ordo кӯмак мекунад пайгирӣ кунед, ки мизоҷон аз куҷо меоянд", "Ordo нишон медиҳад кадом канал беҳтар кор мекунад", "Ordo иқтисодиёти воҳид ва конверсияҳоро ба таври автоматӣ ҳисоб мекунад", "Ordo каналҳоро таҳлил мекунад ва корандаҳоро ба таври автоматӣ васеъ мекунад", "Ordo воронкаҳо месозад ва гипотезаҳоро санҷида мебарорад — шумо натиҷаро мебинед"], "sales": ["Ordo CRM ва скрипти тамоси аввалро медиҳад", "Ordo конверсияро дар ҳар марҳила мечинад", "Ordo воронкаро автоматизатсия мекунад ва дар бораи дархостҳо ёдовар мешавад", "Ordo CRM-ро автоматизатсия мекунад, вазифаҳо таъин мекунад ва даромадро пешгӯӣ мекунад", "Ordo бахши фурӯшро васеъ мекунад — ҳар менеҷер аз рӯи системаи ягона кор мекунад"], "product": ["Ordo равандро рақамӣ мекунад ва баргаштҳоро бартараф менамояд", "Ordo USP медиҳад: волидайн рушди кӯдакро онлайн мебинанд", "Ordo тавассути рӯзномаи электронӣ садоқатро мустаҳкам мекунад", "Ordo дарсҳои интерактивӣ ва таҳлили рушдро илова мекунад — USP меафзояд", "Ordo маҳсулотро ба канали мустақили ҷалб табдил медиҳад"], "service": ["Ordo шикоятҳоро тавассути шаффофият барои волидайн бартараф мекунад", "Ordo волидайнро ба таври автоматӣ огоҳ мекунад", "Ordo абзорҳои NPS ва таърихи муроҷиатҳоро медиҳад", "Ordo NPS, пурсишномаи волидайн ва ҷамъоварии бозхӯрдро автоматизатсия мекунад", "Ordo харитаи роҳи мизоҷро месозад ва рафтанро пешгирӣ мекунад"], "finance": ["Ordo DDC-ро бидуни ҷадвал ба таври автоматӣ мебарад", "Ordo дар бораи шикофҳо огоҳ мекунад ва рентабелнокиро ҳисоб мекунад", "Ordo OPU, буҷет ва тақвими пардохтро автоматизатсия мекунад", "Ordo моделҳои молиявӣ месозад ва шикофҳоро пешакӣ пешгӯӣ мекунад", "Ordo ба директор назорати пурраи молиявиро дар вақти воқеӣ таъмин мекунад"], "management": ["Ordo сохтор медиҳад: ҳар кас вазифаашро медонад", "«Директори AI» — ҳамаи нишондиҳандаҳо дар як экран", "Ordo ҳисоботдиҳӣ ва нақшакашии ҳафтагиро автоматизатсия мекунад", "Ordo гузоштани вазифаҳо ва назорати KPI-ро автоматизатсия мекунад", "Ordo ба директори операционӣ дашборди пурра медиҳад — ҳеҷ чиз гум намешавад"], "legal": ["Ordo ҳамаи ҳуҷҷатҳоро рақамӣ нигоҳ медорад ва дар бораи мӯҳлатҳо ёдовар мешавад", "Ordo бастаи тафтишотро ба таври автоматӣ ташаккул медиҳад", "Ordo тавассути автоматизатсия бори методистро кам мекунад", "Ordo мӯҳлатҳои ҳуҷҷатҳоро ба таври автоматӣ назорат мекунад ва дар бораи навсозӣ хотиррасон мешавад", "Ordo ҳар бастаи ҳуҷҷатҳоро бо 1 клик ташкил медиҳад"], "hr": ["Ordo ҳамаи маълумоти кадриро рақамӣ нигоҳ медорад", "HR AI KPI ва мотиватсияи ҳар корманд пайгирӣ мекунад", "Ordo ҷадвалҳо, графикҳо ва рухсатиҳоро автоматизатсия мекунад", "Ordo KPI, ҷадвалҳо ва ҳисоби маошро автоматизатсия мекунад", "Ordo ҳисоби пурраи HR-ро мебарад — директор ҳар корманро онлайн мебинад"], "ltv": ["Ordo табелҳо ва ҳисоби такрориро автоматизатсия мекунад", "Волидайн квитансияҳои қулай ва таърихи пардохтҳоро онлайн мегиранд", "Ordo ҳисоби такрориро дар 1 сония иҷро мекунад", "Ordo ба таври автоматӣ ҳисоби такрорӣ мекунад ва квитансияҳо мефиристад", "Ordo ҷадвалҳо, пардохтҳо ва таҳлили иштирокро дар як ҷо муттаҳид мекунад"], "teacher": ["Ordo зиёда аз 10 000 дарси омода медиҳад — педагог мувофиқи платформа кор мекунад", "Ordo равандро аз педагог мустақил стандартизатсия мекунад", "Методист нақшаҳо ва ҳисоботҳоро ба таври автоматӣ санҷида мешавад", "Ordo ба методист имкон медиҳад сифати ҳар педагогро онлайн назорат кунад", "Ordo равандро пурра автоматизатсия мекунад — стандарт аз педагоги мушаххас вобаста нест"], "cook": ["Ordo дар стандартизатсияи ғизо ва бартараф кардани шикоятҳои волидайн кӯмак мекунад", "Ordo менюҳои омода мувофиқи меъёрҳо медиҳад ва харидҳоро назорат мекунад", "Ordo меню, харид ва анборро дар як система ба таври автоматӣ мебарад", "Ordo ба волидайн имкон медиҳад ратсиони кӯдакро онлайн бинанд", "Ordo ғизоро пурра автоматизатсия мекунад: меню, меъёрҳо, харид ва анбор"], "nanny": ["Ordo дар сохтордиҳии кори дояи кӯдак ва бартараф кардани беназмӣ кӯмак мекунад", "Ordo рӯйхатҳо медиҳад ва ба директор имкон медиҳад иҷрои вазифаҳоро бинад", "Ordo ҳамаи вазифаҳоро ба формати рақамии ҳисоботдор мегузаронад", "Ordo ба волидайн шаффофият медиҳад — онҳо нигоҳубини кӯдакро онлайн мебинанд", "Ordo кори дояи кӯдакро пурра рақамӣ мекунад — кори коғазӣ нест"]}, "tasks": {"marketing": ["1–2 канали корӣ муайян карда, тамаркуз кунед", "Тегҳои UTM насб кунед — бидонед мизоҷон аз куҷо меоянд", "Таргет ба 1 сегменти мушаххас оғоз кунед"], "sales": ["Скрипти тамоси аввалро дар WhatsApp нависед", "Рӯзи санҷиширо ҳамчун стандарти воронка ҷорӣ кунед", "Масъули дархостҳо таъин кунед — на соҳиб"], "product": ["Бо 5–7 мизоҷ custdev гузаронед: чаро маҳз ба шумо меоянд", "USP-ро дар як ҷумла баён кунед", "Барнома илова кунед, ки рақибон надоранд"], "service": ["Ба 3 мизоҷи рафта занг занед ва сабабро бипурсед", "Стандарти посух ба шикоятро ҷорӣ кунед — дар 2 соат", "Ҳар моҳ як маротиба бозхӯрди хаттӣ ҷамъ кунед"], "finance": ["DDC-ро ҳар рӯз пур кардан оғоз кунед", "Ҳисобҳои шахсӣ ва корӣ ҷудо кунед", "Рентабелнокиро ҳадди аққал ҳар моҳ ҳисоб кунед"], "management": ["Барои ҳар корманд дастури вазифавӣ нависед", "Ҷаласаи ҳафтагии нақшакашӣ ҷорӣ кунед", "Ҳамаи вазифаҳоро хаттӣ диҳед, шифоҳӣ не"], "legal": ["Ҳамаи шартномаҳои амалкунандаро дар як папка ҷамъ кунед", "Рӯйхати санҷишии тафтишоти пешбинишуда тартиб диҳед", "Дар бораи хавфҳои ҷорӣ бо ҳуқуқшунос маслиҳат кунед"], "hr": ["Шартномаи меҳнатӣ барои ҳамаи кормандон ташкил кунед", "Ҷадвали электронии кормандон созед", "Торӣ мотиватсионӣ тартиб диҳед: маош + қисми тағйирёбанда"], "ltv": ["Ҷадвали иштирокро электронӣ пур кардан оғоз кунед", "Ба мизоҷоне, ки 2+ ҳафта паи ҳам наомадаанд, занг занед", "Системаи ҳисоби такрориро ҳангоми ғоибӣ ҷорӣ кунед"], "teacher": ["Талаботро ба педагог нависед: малакаҳои нарм ва сахт", "Педагогонро ба платформа бо дарсҳои омода пайваст кунед", "Мутахассис бо забони тоҷикӣ ёбед — талаботи асосии бозор"], "cook": ["Менюи сиклиро барои 2 ҳафта мувофиқи меъёрҳо тартиб диҳед", "Журнали харидии маҳсулотро электронӣ баред", "Рӯйхати санҷишии қабул ва нигаҳдории маҳсулотро тайёр кунед"], "nanny": ["Рӯйхати ҳаррӯзаи санҷишро барои дояи кӯдак тартиб диҳед", "Тозакунӣ ва иҷрои вазифаҳоро аксбардорӣ кунед", "Дастурамали нигоҳубини кӯдакони синну солҳои гуногунро тайёр кунед"]}}, "en": {"names": {"marketing": "Marketing", "sales": "Sales", "product": "Product", "service": "Service", "finance": "Finance", "management": "Management", "legal": "Legal protection", "hr": "HR protection", "ltv": "Retention (LTV)", "teacher": "Teacher", "cook": "Cook", "nanny": "Nanny"}, "hints": {"marketing": "Attracting new clients", "sales": "Closing incoming leads", "product": "USP and client loyalty", "service": "Handling complaints and refunds", "finance": "Accounting and money management", "management": "Team and task management", "legal": "Documents, contracts, inspections", "hr": "Staff onboarding and turnover", "ltv": "Attendance, payments, recalculations", "teacher": "Standards and educational process", "cook": "Nutrition, menu, procurement, norms", "nanny": "Childcare, cleaning, daily routine"}, "tips": {"marketing": "The <strong>Sales AI</strong> cabinet tracks client sources and gives advertising recommendations.", "sales": "<strong>Sales AI</strong> manages CRM, sends reminders about leads.", "product": "<strong>Child development analysis</strong> — parents see progress online. This becomes your USP.", "finance": "<strong>Finance AI</strong> — cash flow, P&L, recalculations automatically.", "management": "<strong>Director AI</strong> — unified dashboard across all departments.", "legal": "<strong>Electronic document flow</strong> — stores all contracts digitally, generates inspection packages in 1 click.", "hr": "<strong>HR AI</strong> — personal files, KPI, motivation in digital format.", "ltv": "<strong>Electronic diary</strong> — timesheets, recalculations, payments automatically.", "service": "<strong>Communication tools</strong> — parents receive notifications and diary access online.", "teacher": "<strong>Teacher AI</strong> — ready-made lessons by state standard for every day.", "cook": "<strong>Cook AI</strong> — menu, procurement, and warehouse are connected. Parents see the menu online.", "nanny": "<strong>Nanny AI</strong> — tasks, checklists, reports in digital format."}, "ordoSolve": {"marketing": "\"Sales AI\" — funnel, leads, analytics in one screen", "sales": "\"Sales AI\" — CRM, leads, reminders, scripts", "product": "Electronic diary + child development analysis — your key USP", "service": "Parent cabinet + communications — reduces complaints and refunds", "finance": "\"Finance AI\" — cash flow, P&L, recalculations, payment calendar", "management": "\"Director AI\" — real-time dashboard across all KPIs", "legal": "Electronic document flow — inspection package in 1 click", "hr": "\"HR AI\" — personal files, KPI, motivation under control", "ltv": "Electronic journal — timesheets and recalculations automatically", "teacher": "\"Teacher AI\" — 10,000+ lessons in 3 languages by state standard", "cook": "\"Cook AI\" — menu, procurement, warehouse, nutrition norms automatically", "nanny": "\"Nanny AI\" — tasks, cleaning, childcare in digital format"}, "levels": {"marketing": ["No internet advertising — only word of mouth and local flyers", "Have materials but they don't bring results", "Have advertising budget, attracting clients. Effectiveness is not measured", "Understand advertising ROI, unit economics works", "Marketing strategy, systematic hypothesis testing"], "sales": ["I sell myself, no scripts or structure", "Have staff who work as they can. Metric — only \"how much sold\"", "Have sales scripts, main conversions are measured", "CRM, segmenting new vs repeat clients, weekly analysis", "Sales team is autonomous, plan achieved in 90% of cases"], "product": ["Product causes disappointment and refunds", "No USP, no stable positive reviews", "Clients are loyal, significant share comes from referrals", "Clear USP — clients get something competitors don't offer", "Product itself drives growth without marketing"], "service": ["Returns >10%, negative reviews online", "Returns 5–10%, each case handled separately, no system", "Returns <5%, someone is responsible for complaints", "NPS is measured, client service works systematically", "Customer journey map, all quality metrics in place"], "finance": ["Cash flow gaps, don't understand where money goes", "Have basic spreadsheets but make decisions intuitively", "Maintain cash flow and payment calendar, no gaps", "Maintain P&L and Balance, budgeting, accounting automated", "Financial modeling, CFO on staff"], "management": ["Manual management, everything depends on me", "Responsibility zones exist, tasks given in writing", "Weekly planning, daily KPI tracking", "Tasks in system, business processes documented", "COO in place, owner only at strategy level"], "legal": ["Documents have errors or missing, any inspection means a fine", "Contracts in folders, inspection prep only \"before the visit\"", "Need lawyer and methodologist, support is labor-intensive", "Methodologist control exists but director spends too many resources", "All documents digital, inspection package in 1 click"], "hr": ["Staff without contracts, high turnover, constant conflicts", "Employment contracts are made but stored in paper folders", "HR data in Excel: vacations, schedules, timesheets", "Need dedicated HR, workload growing", "All personal files digital, KPI and motivation in system"], "ltv": ["Paper timesheets, cash payments without receipts, recalculation errors", "Records in folders, manual recalculations", "Tracking in Excel/Google Sheets, basic transparency", "Need accountant, document volume growing", "Timesheets, recalculations and payments automated in one system"], "teacher": ["Heavy dependence on teacher, no standards. If they leave — process collapses", "Have job descriptions and plans, but control is manual", "Plans in Word/Excel, methodologist reviews with delay", "Methodologist control exists but director spends too many resources", "Process fully digitized — parents and director see analytics online"], "cook": ["Nutrition is chaotic, no menu, parent complaints", "Menu appeared but everything on paper. Control is irregular", "Nutrition system is organized but requires constant supervision", "Partial automation, cook works according to norms", "Nutrition fully automated: menu, procurement and warehouse connected"], "nanny": ["Duties undefined, work is chaotic", "Tasks formalized but execution not checked systematically", "Checklists in Excel, data scattered", "Works formally but needs additional administrators", "Tasks recorded in system, everyone sees execution online"]}, "ordoHints": {"marketing": ["Ordo helps track where clients come from", "Ordo shows which channel works best", "Ordo calculates unit economics and conversions automatically", "Ordo analyzes channels and automatically scales the ones that work", "Ordo builds funnels and tests hypotheses — you see results without doing the analysis"], "sales": ["Ordo provides CRM and first contact script", "Ordo measures conversion at each stage", "Ordo automates the funnel and reminds about pending leads", "Ordo automates CRM, assigns tasks to managers and forecasts revenue", "Ordo scales the sales team — every manager works by one unified system"], "product": ["Ordo digitizes the process and eliminates refunds", "Ordo gives you USP: parents see child development online", "Ordo strengthens loyalty through the electronic diary", "Ordo adds interactive lessons and child development analysis — your USP grows", "Ordo turns the product into a self-sufficient client acquisition channel"], "service": ["Ordo eliminates complaints through transparency for parents", "Ordo automatically notifies parents about attendance", "Ordo provides NPS tools and complaint history", "Ordo automates NPS, parent surveys and feedback collection", "Ordo builds the full customer journey map and prevents churn"], "finance": ["Ordo maintains cash flow automatically without spreadsheets", "Ordo alerts about gaps and calculates profitability", "Ordo automates P&L, budget and payment calendar", "Ordo builds financial models and warns about cash flow gaps in advance", "Ordo gives the director full financial control in real time"], "management": ["Ordo gives structure: everyone knows their tasks", "Director AI — all KPIs on one screen", "Ordo automates reporting and weekly planning", "Ordo automates task assignment and KPI tracking for every employee", "Ordo gives the COO a complete dashboard — nothing gets lost"], "legal": ["Ordo stores all documents digitally and reminds about deadlines", "Ordo generates inspection package automatically", "Ordo reduces methodologist workload through automation", "Ordo automatically tracks document deadlines and sends renewal reminders", "Ordo generates any document package in 1 click — zero manual work"], "hr": ["Ordo stores all HR data digitally", "HR AI tracks KPI and motivation of each person", "Ordo automates timesheets, schedules and leave management", "Ordo automates KPI, schedules and payroll calculations", "Ordo maintains full HR records — director sees every employee online"], "ltv": ["Ordo automates timesheets and recalculations for absences", "Parents get convenient receipts and payment history online", "Ordo does recalculations in 1 second instead of an hour", "Ordo automatically recalculates and sends receipts to parents", "Ordo combines timesheets, payments and attendance analytics in one place"], "teacher": ["Ordo provides 10,000+ ready lessons — teacher works via platform", "Ordo standardizes process independent of which teacher", "Methodologist checks plans and reports automatically", "Ordo gives the methodologist tools to monitor each teacher quality online", "Ordo fully automates the process — standard is independent of any specific teacher"], "cook": ["Ordo helps standardize nutrition and eliminate parent complaints", "Ordo provides ready menus by norms and controls procurement", "Ordo automatically manages menu, procurement and warehouse in one system", "Ordo lets parents see their child's diet online — builds trust", "Ordo fully automates nutrition: menu, norms, procurement and warehouse"], "nanny": ["Ordo helps structure the nanny's work and eliminate chaos", "Ordo provides checklists and lets the director see task completion", "Ordo transfers all tasks to digital format with reporting", "Ordo gives parents transparency — they see childcare online", "Ordo fully digitizes the nanny's work — zero paperwork"]}, "tasks": {"marketing": ["Identify 1–2 working channels and focus on them", "Set UTM tags to know where clients come from", "Launch targeted ads for 1 specific segment"], "sales": ["Write a first contact script for WhatsApp", "Introduce trial day as funnel standard", "Appoint someone responsible for leads — not the owner"], "product": ["Run custdev with 5–7 clients: why do they choose you", "Formulate USP in one sentence", "Add a program competitors don't offer"], "service": ["Call 3 clients who left and ask why", "Introduce complaint response standard — reply within 2 hours", "Collect written feedback once a month"], "finance": ["Start maintaining daily cash flow log", "Separate personal and business accounts", "Calculate profitability at least once a month"], "management": ["Write job descriptions for each employee", "Introduce weekly planning meetings", "Set all tasks in writing, not verbally"], "legal": ["Gather all active contracts in one folder", "Create a checklist for planned inspections", "Consult a lawyer about current risks"], "hr": ["Formalize employment contracts for all staff", "Create an electronic staff timesheet", "Design motivation grid: base salary + variable part"], "ltv": ["Start tracking attendance electronically", "Call clients who missed 2+ consecutive weeks", "Introduce recalculation system for absences"], "teacher": ["Write teacher requirements: soft and hard skills", "Connect teachers to platform with ready-made lessons", "Hire a Kazakh/local language specialist — top market demand"], "cook": ["Create a 2-week cyclic menu per nutrition norms", "Start electronic procurement log", "Develop product receiving and storage checklist"], "nanny": ["Create daily checklist for nanny", "Introduce photo confirmation of cleaning and task completion", "Develop childcare instruction for different age groups"]}}, "ms": {"names": {"marketing": "Pemasaran", "sales": "Jualan", "product": "Produk", "service": "Perkhidmatan", "finance": "Kewangan", "management": "Pengurusan", "legal": "Perlindungan Undang-undang", "hr": "Perlindungan HR", "ltv": "Pengekalan (LTV)", "teacher": "Pendidik", "cook": "Tukang Masak", "nanny": "Pengasuh"}, "hints": {"marketing": "Menarik pelanggan baharu", "sales": "Menutup petunjuk masuk", "product": "USP dan kesetiaan pelanggan", "service": "Menangani aduan dan pemulangan", "finance": "Perakaunan dan pengurusan wang", "management": "Pengurusan pasukan dan tugas", "legal": "Dokumen, kontrak, pemeriksaan", "hr": "Pengesahan kakitangan dan pusing ganti", "ltv": "Kehadiran, pembayaran, pengiraan semula", "teacher": "Piawaian dan proses pendidikan", "cook": "Pemakanan, menu, perolehan, norma", "nanny": "Penjagaan kanak-kanak, pembersihan, rutin harian"}, "tips": {"marketing": "Kabinet <strong>Jualan AI</strong> menjejaki sumber pelanggan dan memberikan cadangan pengiklanan.", "sales": "<strong>Jualan AI</strong> menguruskan CRM, menghantar peringatan tentang petunjuk.", "product": "<strong>Analisis perkembangan kanak-kanak</strong> — ibu bapa melihat kemajuan dalam talian. Ini menjadi USP anda.", "finance": "<strong>Kewangan AI</strong> — aliran tunai, P&L, pengiraan semula secara automatik.", "management": "<strong>Pengarah AI</strong> — papan pemuka bersatu merentas semua jabatan.", "legal": "<strong>Aliran dokumen elektronik</strong> — menyimpan semua kontrak secara digital, menjana pakej pemeriksaan dalam 1 klik.", "hr": "<strong>HR AI</strong> — fail peribadi, KPI, motivasi dalam format digital.", "ltv": "<strong>Diari elektronik</strong> — jadual waktu, pengiraan semula, pembayaran secara automatik.", "service": "<strong>Alat komunikasi</strong> — ibu bapa menerima pemberitahuan dan akses diari dalam talian.", "teacher": "<strong>Guru AI</strong> — pelajaran siap mengikut piawaian negara untuk setiap hari.", "cook": "<strong>Tukang Masak AI</strong> — menu, perolehan, dan gudang disambungkan. Ibu bapa melihat menu dalam talian.", "nanny": "<strong>Pengasuh AI</strong> — tugas, senarai semak, laporan dalam format digital."}, "ordoSolve": {"marketing": "\"Jualan AI\" — corong, petunjuk, analitik dalam satu skrin", "sales": "\"Jualan AI\" — CRM, petunjuk, peringatan, skrip", "product": "Diari elektronik + analisis perkembangan kanak-kanak — USP utama anda", "service": "Kabinet ibu bapa + komunikasi — mengurangkan aduan dan pemulangan", "finance": "\"Kewangan AI\" — aliran tunai, P&L, pengiraan semula, kalendar pembayaran", "management": "\"Pengarah AI\" — papan pemuka masa nyata merentas semua KPI", "legal": "Aliran dokumen elektronik — pakej pemeriksaan dalam 1 klik", "hr": "\"HR AI\" — fail peribadi, KPI, motivasi terkawal", "ltv": "Jurnal elektronik — jadual waktu dan pengiraan semula secara automatik", "teacher": "\"Guru AI\" — 10,000+ pelajaran dalam 3 bahasa mengikut piawaian negara", "cook": "\"Tukang Masak AI\" — menu, perolehan, gudang, norma pemakanan secara automatik", "nanny": "\"Pengasuh AI\" — tugas, pembersihan, penjagaan kanak-kanak dalam format digital"}, "levels": {"marketing": ["Tiada pengiklanan internet — hanya dari mulut ke mulut dan risalah tempatan", "Ada bahan tetapi tidak membawa hasil", "Ada belanjawan iklan, menarik pelanggan. Keberkesanan tidak diukur", "Faham ROI pengiklanan, ekonomi unit berfungsi", "Strategi pemasaran, ujian hipotesis sistematik"], "sales": ["Saya jual sendiri, tiada skrip atau struktur", "Ada kakitangan yang bekerja semampunya. Metrik — hanya \"berapa yang dijual\"", "Ada skrip jualan, penukaran utama diukur", "CRM, membahagikan pelanggan baru/berulang, analisis mingguan", "Pasukan jualan adalah autonomi, rancangan dicapai dalam 90% kes"], "product": ["Produk menyebabkan kekecewaan dan pemulangan", "Tiada USP, tiada ulasan positif yang stabil", "Pelanggan setia, bahagian besar datang daripada rujukan", "USP yang jelas — pelanggan mendapat sesuatu yang pesaing tidak tawarkan", "Produk itu sendiri mendorong pertumbuhan tanpa pemasaran"], "service": ["Pemulangan >10%, ulasan negatif dalam talian", "Pemulangan 5–10%, setiap kes dikendalikan secara berasingan", "Pemulangan <5%, ada orang bertanggungjawab untuk aduan", "NPS diukur, perkhidmatan pelanggan berfungsi secara sistematik", "Peta perjalanan pelanggan, semua metrik kualiti tersedia"], "finance": ["Jurang aliran tunai, tidak faham ke mana wang pergi", "Ada hamparan asas tetapi membuat keputusan secara intuitif", "Mengekalkan aliran tunai dan kalendar pembayaran, tiada jurang", "Mengekalkan P&L dan Kunci Kira-kira, belanjawan, perakaunan automatik", "Pemodelan kewangan, CFO dalam kakitangan"], "management": ["Pengurusan manual, segalanya bergantung pada saya", "Zon tanggungjawab wujud, tugas diberikan secara bertulis", "Perancangan mingguan, penjejakan KPI harian", "Tugas dalam sistem, proses perniagaan didokumenkan", "COO ada, pemilik hanya pada peringkat strategi"], "legal": ["Dokumen mempunyai ralat atau hilang, sebarang pemeriksaan bermakna denda", "Kontrak dalam folder, persediaan pemeriksaan hanya \"sebelum lawatan\"", "Perlu peguam dan metodologis, sokongan memerlukan buruh intensif", "Kawalan metodologis wujud tetapi pengarah menghabiskan terlalu banyak sumber", "Semua dokumen digital, pakej pemeriksaan dalam 1 klik"], "hr": ["Kakitangan tanpa kontrak, pusing ganti tinggi, konflik berterusan", "Kontrak pekerjaan dibuat tetapi disimpan dalam folder kertas", "Data HR dalam Excel: cuti, jadual, jadual waktu", "Perlu HR khusus, beban kerja bertambah", "Semua fail peribadi digital, KPI dan motivasi dalam sistem"], "ltv": ["Jadual waktu kertas, bayaran tunai tanpa resit, ralat pengiraan semula", "Rekod dalam folder, pengiraan semula manual", "Penjejakan dalam Excel/Google Sheets, ketelusan asas", "Perlu akauntan, jumlah dokumen bertambah", "Jadual waktu, pengiraan semula dan pembayaran automatik dalam satu sistem"], "teacher": ["Kebergantungan tinggi pada guru, tiada piawaian. Jika pergi — proses runtuh", "Ada penerangan tugas dan rancangan, tetapi kawalan manual", "Rancangan dalam Word/Excel, metodologis menyemak dengan kelewatan", "Kawalan metodologis wujud tetapi pengarah menghabiskan terlalu banyak sumber", "Proses didigitalkan sepenuhnya — ibu bapa dan pengarah melihat analitik dalam talian"], "cook": ["Pemakanan huru-hara, tiada menu, aduan ibu bapa", "Menu muncul tetapi semuanya di atas kertas. Kawalan tidak tetap", "Sistem pemakanan teratur tetapi memerlukan penyeliaan berterusan", "Automasi separa, tukang masak bekerja mengikut norma", "Pemakanan diautomatikkan sepenuhnya: menu, perolehan dan gudang disambungkan"], "nanny": ["Tugas tidak ditentukan, kerja huru-hara", "Tugas diformulasikan tetapi pelaksanaan tidak disemak secara sistematik", "Senarai semak dalam Excel, data tersebar", "Berfungsi secara formal tetapi memerlukan pentadbir tambahan", "Tugas direkodkan dalam sistem, semua orang melihat pelaksanaan dalam talian"]}, "ordoHints": {"marketing": ["Ordo membantu menjejaki dari mana pelanggan datang", "Ordo menunjukkan saluran mana yang berfungsi terbaik", "Ordo mengira ekonomi unit dan penukaran secara automatik", "Ordo menganalisis saluran dan menskalakan yang berfungsi secara automatik", "Ordo membina corong dan menguji hipotesis — anda melihat hasil tanpa melakukan analisis"], "sales": ["Ordo menyediakan CRM dan skrip hubungan pertama", "Ordo mengukur penukaran di setiap peringkat", "Ordo mengautomatikkan corong dan mengingatkan tentang petunjuk tertangguh", "Ordo mengautomatikkan CRM, menugaskan tugas dan meramalkan hasil", "Ordo menskalakan pasukan jualan — setiap pengurus bekerja mengikut sistem yang sama"], "product": ["Ordo mendigitalkan proses dan menghapuskan pemulangan", "Ordo memberikan USP: ibu bapa melihat perkembangan kanak-kanak dalam talian", "Ordo mengukuhkan kesetiaan melalui diari elektronik", "Ordo menambah pelajaran interaktif dan analisis perkembangan — USP anda berkembang", "Ordo mengubah produk menjadi saluran pemerolehan pelanggan yang berdikari"], "service": ["Ordo menghapuskan aduan melalui ketelusan kepada ibu bapa", "Ordo memberitahu ibu bapa secara automatik tentang kehadiran", "Ordo menyediakan alat NPS dan sejarah aduan", "Ordo mengautomatikkan NPS, tinjauan ibu bapa dan pengumpulan maklum balas", "Ordo membina peta perjalanan pelanggan penuh dan mencegah pengunduran"], "finance": ["Ordo mengekalkan aliran tunai secara automatik tanpa hamparan", "Ordo memberi amaran tentang jurang dan mengira keuntungan", "Ordo mengautomatikkan P&L, belanjawan dan kalendar pembayaran", "Ordo membina model kewangan dan memberi amaran tentang jurang aliran tunai lebih awal", "Ordo memberikan pengarah kawalan kewangan penuh dalam masa nyata"], "management": ["Ordo memberikan struktur: semua orang tahu tugas mereka", "Pengarah AI — semua KPI dalam satu skrin", "Ordo mengautomatikkan pelaporan dan perancangan mingguan", "Ordo mengautomatikkan penugasan tugas dan penjejakan KPI setiap pekerja", "Ordo memberikan COO papan pemuka lengkap — tiada yang tertinggal"], "legal": ["Ordo menyimpan semua dokumen secara digital dan mengingatkan tentang tarikh akhir", "Ordo menjana pakej pemeriksaan secara automatik", "Ordo mengurangkan beban kerja metodologis melalui automasi", "Ordo secara automatik menjejaki tarikh akhir dokumen dan menghantar peringatan pembaharuan", "Ordo menjana mana-mana pakej dokumen dalam 1 klik — tiada kerja manual"], "hr": ["Ordo menyimpan semua data HR secara digital", "HR AI menjejaki KPI dan motivasi setiap orang", "Ordo mengautomatikkan jadual waktu, jadual dan pengurusan cuti", "Ordo mengautomatikkan KPI, jadual dan pengiraan gaji", "Ordo mengekalkan rekod HR penuh — pengarah melihat setiap pekerja dalam talian"], "ltv": ["Ordo mengautomatikkan jadual waktu dan pengiraan semula untuk ketidakhadiran", "Ibu bapa mendapat resit yang mudah dan sejarah pembayaran dalam talian", "Ordo melakukan pengiraan semula dalam 1 saat", "Ordo secara automatik mengira semula dan menghantar resit kepada ibu bapa", "Ordo menggabungkan jadual waktu, pembayaran dan analitik kehadiran di satu tempat"], "teacher": ["Ordo menyediakan 10,000+ pelajaran siap — guru bekerja melalui platform", "Ordo menstandarkan proses tanpa bergantung pada guru tertentu", "Metodologis menyemak rancangan dan laporan secara automatik", "Ordo memberikan metodologis alat untuk memantau kualiti setiap guru dalam talian", "Ordo mengautomatikkan proses sepenuhnya — piawaian tidak bergantung pada guru tertentu"], "cook": ["Ordo membantu menyeragamkan pemakanan dan menghapuskan aduan ibu bapa", "Ordo menyediakan menu siap mengikut norma dan mengawal perolehan", "Ordo menguruskan menu, perolehan dan gudang secara automatik dalam satu sistem", "Ordo membolehkan ibu bapa melihat diet anak mereka dalam talian — membina kepercayaan", "Ordo mengautomatikkan pemakanan sepenuhnya: menu, norma, perolehan dan gudang"], "nanny": ["Ordo membantu menstrukturkan kerja pengasuh dan menghapuskan huru-hara", "Ordo menyediakan senarai semak dan membolehkan pengarah melihat penyempurnaan tugas", "Ordo memindahkan semua tugas ke format digital dengan pelaporan", "Ordo memberikan ketelusan kepada ibu bapa — mereka melihat penjagaan anak dalam talian", "Ordo mendigitalkan kerja pengasuh sepenuhnya — tiada kerja kertas"]}, "tasks": {"marketing": ["Kenal pasti 1–2 saluran yang berfungsi dan fokus kepadanya", "Tetapkan tag UTM untuk mengetahui dari mana pelanggan datang", "Lancarkan iklan bersasar untuk 1 segmen khusus"], "sales": ["Tulis skrip hubungan pertama untuk WhatsApp", "Perkenalkan hari percubaan sebagai piawaian corong", "Lantik orang yang bertanggungjawab untuk petunjuk — bukan pemilik"], "product": ["Jalankan custdev dengan 5–7 pelanggan: mengapa mereka memilih anda", "Formulasikan USP dalam satu ayat", "Tambah program yang pesaing tidak tawarkan"], "service": ["Hubungi 3 pelanggan yang pergi dan tanya sebabnya", "Perkenalkan piawaian tindak balas aduan — balas dalam 2 jam", "Kumpul maklum balas bertulis sekali sebulan"], "finance": ["Mula mengekalkan log aliran tunai harian", "Asingkan akaun peribadi dan perniagaan", "Kira keuntungan sekurang-kurangnya sekali sebulan"], "management": ["Tulis penerangan tugas untuk setiap pekerja", "Perkenalkan mesyuarat perancangan mingguan", "Berikan semua tugas secara bertulis, bukan lisan"], "legal": ["Kumpulkan semua kontrak aktif dalam satu folder", "Buat senarai semak untuk pemeriksaan yang dirancang", "Berunding dengan peguam tentang risiko semasa"], "hr": ["Formalisasikan kontrak pekerjaan untuk semua kakitangan", "Buat jadual waktu kakitangan elektronik", "Reka bentuk grid motivasi: gaji pokok + bahagian berubah"], "ltv": ["Mula menjejaki kehadiran secara elektronik", "Hubungi pelanggan yang tidak hadir selama 2+ minggu berturut-turut", "Perkenalkan sistem pengiraan semula untuk ketidakhadiran"], "teacher": ["Tulis keperluan guru: kemahiran lembut dan keras", "Sambungkan guru ke platform dengan pelajaran siap", "Ambil pakar bahasa tempatan — permintaan utama pasaran"], "cook": ["Buat menu siklik 2 minggu mengikut norma pemakanan", "Mulakan log perolehan produk elektronik", "Bangunkan senarai semak penerimaan dan penyimpanan produk"], "nanny": ["Buat senarai semak harian untuk pengasuh", "Perkenalkan pengesahan foto pembersihan dan penyempurnaan tugas", "Bangunkan arahan penjagaan kanak-kanak mengikut kumpulan umur"]}}};
+
+// All languages have full content above
+
+const BIZ=BLOCKS.filter(b=>b.sec==='biz');
+const ROLES=BLOCKS.filter(b=>b.sec==='roles');
+let answers={}, current=0, formData={}, curLang='ru';
+
+// ─── LANG ─────────────────────────────────────
+function setLang(lang){
+  curLang=lang;
+  document.documentElement.lang=lang;
+  document.querySelectorAll('.lang-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['ru','kz','uz','kg','tj','en','ms'][i]===lang);
+  });
+  applyLang();
+  // Re-render question if currently on question screen
+  if(document.getElementById('s-q').classList.contains('active')){
+    renderQ();
+  }
+  // Re-render result if currently showing
+  if(document.getElementById('s-result').classList.contains('active')&&Object.keys(answers).length>0){
+    // Full re-render so block names, tasks and recommendations translate
+    const savedScreen='s-result';
+    showResult();
+  }
+}
+
+function applyLang(){
+  const t=T[curLang];
+  // Intro
+  document.getElementById('i-eyebrow').textContent=t.iEyebrow;
+  document.getElementById('i-h1').innerHTML=t.iH1;
+  document.getElementById('i-sub').textContent=t.iSub;
+  document.getElementById('i-s1').textContent=t.iS1;
+  document.getElementById('i-s2').textContent=t.iS2;
+  document.getElementById('i-s3').textContent=t.iS3;
+  document.getElementById('i-s4').textContent=t.iS4;
+  document.getElementById('i-btn').textContent=t.iBtn;
+  // Form labels
+  document.getElementById('f-title').textContent=t.fTitle;
+  document.getElementById('f-sub').textContent=t.fSub;
+  const setLbl=(id,txt,req)=>document.getElementById(id).innerHTML=txt+(req?'<span class="req">*</span>':'');
+  setLbl('fl-name',t.flName,true);setLbl('fl-role',t.flRole,true);
+  setLbl('fl-email',t.flEmail,true);setLbl('fl-telegram',t.flTelegram,true);
+  setLbl('fl-phone',t.flPhone,true);setLbl('fl-whatsapp',t.flWhatsapp,false);
+  setLbl('fl-center',t.flCenter,true);setLbl('fl-city',t.flCity,true);
+  setLbl('fl-type',t.flType,true);setLbl('fl-kids',t.flKids,false);
+  setLbl('fl-problems',t.flProblems,true);setLbl('fl-help',t.flHelp,true);
+  setLbl('fl-source',t.flSource,false);
+  document.getElementById('ab-a-lbl').textContent=t.abA;
+  document.getElementById('ab-b-lbl').textContent=t.abB;
+  // Placeholders
+  document.getElementById('f-kids-a').placeholder=t.kidsNow;
+  document.getElementById('f-kids-b').placeholder=t.kidsGoal;
+  // Populate selects
+  fillSelect('f-role',t.roles);
+  fillSelect('f-type',t.types);
+  fillSelect('f-rev-a',[t.revenueNow,...t.revRangesNow],true);
+  fillSelect('f-rev-b',[t.revenueGoal,...t.revRangesGoal],true);
+  fillSelect('f-source',t.sources);
+  // Nav buttons
+  document.getElementById('fb-back').textContent=t.fbBack;
+  document.getElementById('fb-next').textContent=t.fbNext;
+  document.getElementById('btn-back').textContent=t.btnBack;
+  // CTA
+  document.getElementById('cta-t').textContent=t.ctaT||'';
+  document.getElementById('cta-s').textContent=t.ctaS;
+  document.getElementById('cta-btn1').textContent=t.ctaBtn1;
+  document.getElementById('bcopy').textContent=t.ctaCopy;
+  document.getElementById('cta-fine-days').textContent=t.ctaFineDays||'';
+  const _btn2=document.getElementById('cta-btn2');if(_btn2)_btn2.textContent=t.ctaBtn2||'';
+  const _note=document.getElementById('i-note');if(_note)_note.textContent=t.introNote||'';
+  // Result labels
+  document.getElementById('r-title').textContent=t.rTitle;
+  document.getElementById('rl-biz').textContent=t.rlBiz;
+  document.getElementById('rl-roles').textContent=t.rlRoles;
+  document.getElementById('rl-feats').textContent=t.rlFeats;
+  document.getElementById('rl-cabs').textContent=t.rlCabs;
+  document.getElementById('r-quote').textContent=t.quote;
+  // Re-render question if on question screen
+  if(document.getElementById('s-q').classList.contains('active')) renderQ();
+}
+
+function fillSelect(id, opts, firstIsPlaceholder=false){
+  const el=document.getElementById(id);
+  const val=el.value;
+  el.innerHTML='<option value="">—</option>';
+  opts.forEach((o,i)=>{
+    if(firstIsPlaceholder&&i===0){el.querySelector('option').textContent=o;return;}
+    const op=document.createElement('option');op.value=o;op.textContent=o;el.appendChild(op);
+  });
+  el.value=val;
+}
+
+// ─── NAV ──────────────────────────────────────
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function setProg(pct,label){document.getElementById('prog').style.width=pct+'%';document.getElementById('prog-pct').textContent=pct+'%';document.getElementById('prog-label').textContent=label;}
+function goToForm(){show('s-form');setProg(5,T[curLang].fTitle);}
+
+function submitForm(){
+  const req=['f-name','f-role','f-email','f-telegram','f-phone','f-center','f-city','f-type','f-problems','f-help'];
+  let ok=true;
+  req.forEach(id=>{const el=document.getElementById(id);if(!el.value.trim()){el.classList.add('err');ok=false;}else el.classList.remove('err');});
+  if(!ok){document.querySelector('.err').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  formData={
+    name:document.getElementById('f-name').value.trim(),
+    role:document.getElementById('f-role').value,
+    email:document.getElementById('f-email').value.trim(),
+    telegram:document.getElementById('f-telegram').value.trim(),
+    phone:document.getElementById('f-phone').value.trim(),
+    whatsapp:document.getElementById('f-whatsapp').value.trim(),
+    center:document.getElementById('f-center').value.trim(),
+    city:document.getElementById('f-city').value.trim(),
+    type:document.getElementById('f-type').value,
+    kids:document.getElementById('f-kids').value,
+    revA:document.getElementById('f-rev-a').value,
+    kidsA:document.getElementById('f-kids-a').value,
+    revB:document.getElementById('f-rev-b').value,
+    kidsB:document.getElementById('f-kids-b').value,
+    problems:document.getElementById('f-problems').value.trim(),
+    help:document.getElementById('f-help').value.trim(),
+    source:document.getElementById('f-source').value,
+    lang:curLang,
+  };
+  current=0;show('s-q');renderQ();
+}
+
+function C(){return CONTENT[curLang];}
+function blockName(b){return C().names[b.id]||b.id;}
+function blockHint(b){return C().hints[b.id]||'';}
+function blockTip(b){return C().tips[b.id]||'';}
+function blockLevels(b){return C().levels[b.id]||[];}
+function blockHints(b){return C().ordoHints[b.id]||[];}
+function blockTasks(b){return C().tasks[b.id]||[];}
+function blockSolve(b){return C().ordoSolve[b.id]||'';}
+function blockNaLabel(b){
+  const t=T[curLang];
+  if(b.naIdx===undefined)return null;
+  return (t.naLabel[b.naIdx]||'')+' '+t.naSkip;
+}
+
+function renderTabs(){
+  const t=T[curLang];
+  const curSec=BLOCKS[current].sec;
+  const bizDone=BIZ.every(b=>answers[b.id]!==undefined);
+  const rolesDone=ROLES.every(b=>answers[b.id]!==undefined);
+  document.getElementById('sec-badges').innerHTML=
+    `<span class="sec-badge ${curSec==='biz'?'active':(bizDone?'done':'')}">
+      ${t.secBiz}${bizDone?' ✓':''}
+    </span>
+    <span class="sec-badge ${curSec==='roles'?'active':(rolesDone?'done':'')}">
+      ${t.secRoles}${rolesDone?' ✓':''}
+    </span>`;
+}
+
+function renderQ(){
+  const t=T[curLang];
+  const b=BLOCKS[current];
+  // Reset state for new question
+  document.getElementById('lvls').classList.remove('answered');
+  document.getElementById('q-tip').style.display='none';
+  document.getElementById('q-instruction').textContent=T[curLang].qInstruction||'';
+
+  document.getElementById('q-ico').textContent=b.ico;
+  document.getElementById('q-title').textContent=blockName(b);
+  document.getElementById('q-hint').textContent=blockHint(b);
+  document.getElementById('step-lbl').textContent=`${current+1} ${t.stepOf} ${BLOCKS.length}`;
+  const pct=Math.round(10+(current/BLOCKS.length)*85);
+  setProg(pct,blockName(b));
+  renderTabs();
+  const tipEl=document.getElementById('q-tip');
+  const tip=blockTip(b);
+  if(tip){tipEl.innerHTML='💡 '+tip;}
+  tipEl.style.display='none'; // hidden until user selects an answer
+
+  const wrap=document.getElementById('lvls');wrap.innerHTML='';
+  blockLevels(b).forEach((txt,i)=>{
+    const d=document.createElement('div');
+    d.className='lvl'+(answers[b.id]===i+1?' sel':'');
+    d.onclick=()=>select(b.id,i+1);
+    const hint=blockHints(b)[i];
+    // Show hint on all levels that have one, dimmed unless selected
+    const hintHtml=hint?`<div class="lvl-ordo">✅ ${hint}</div>`:'<div class="lvl-ordo"></div>';
+    d.innerHTML=`<span class="lvl-n">${i+1}</span><div class="lvl-body"><div class="lvl-t">${txt}</div>${hintHtml}</div>`;
+    wrap.appendChild(d);
+  });
+
+  // If already answered, show hints immediately
+  if(answers[b.id] !== undefined){
+    document.getElementById('lvls').classList.add('answered');
+    if(blockTip(b)){
+      document.getElementById('q-tip').style.display='block';
+    }
+  }
+
+  const naLabel=blockNaLabel(b);
+  if(naLabel){
+    const na=document.createElement('div');
+    na.className='na-opt'+(answers[b.id]==='na'?' sel':'');
+    na.onclick=()=>select(b.id,'na');
+    na.innerHTML=`<span style="font-size:16px">✕</span><span class="na-t">${naLabel}</span>`;
+    wrap.appendChild(na);
+  }
+
+  document.getElementById('btn-back').textContent=t.btnBack;
+  document.getElementById('btn-back').disabled=(current===0);
+  const nxt=document.getElementById('btn-next');
+  const isLast=current===BLOCKS.length-1;
+  const nextIsRoles=!isLast&&BLOCKS[current+1]&&BLOCKS[current+1].sec==='roles'&&b.sec==='biz';
+  nxt.textContent=isLast?t.btnResult:(nextIsRoles?t.btnRoles:t.btnNext);
+}
+
+function select(id,val){
+  answers[id]=val;
+  document.querySelectorAll('.lvl').forEach((el,i)=>el.classList.toggle('sel',i+1===val));
+  const na=document.querySelector('.na-opt');if(na)na.classList.toggle('sel',val==='na');
+
+  // Show hints + tip after selection for ALL blocks
+  const wrap=document.getElementById('lvls');
+  wrap.classList.add('answered');
+  const tipEl=document.getElementById('q-tip');
+  if(blockTip(BLOCKS[current])){
+    tipEl.style.display='block';
+  } else {
+    tipEl.style.display='none';
+  }
+}
+
+function goNext(){
+  if(answers[BLOCKS[current].id]===undefined){
+    document.querySelectorAll('.lvl,.na-opt').forEach(e=>e.style.outline='2px solid #E24B4A');
+    setTimeout(()=>document.querySelectorAll('.lvl,.na-opt').forEach(e=>e.style.outline=''),1400);
+    return;
+  }
+  if(current<BLOCKS.length-1){current++;renderQ();}else showResult();
+}
+
+function goBack(){
+  if(current===0){show('s-form');setProg(5,T[curLang].fTitle);}
+  else{current--;renderQ();}
+}
+
+// ─── RESULT ───────────────────────────────────
+function lc(v){return v<=1?'l1':v<=2?'l2':'l3';}
+
+function showResult(){
+  show('s-result');setProg(100,'✓');
+  window.scrollTo({top:0,behavior:'smooth'});
+  sendToTelegram();sendToBitrix();sendEmailToClient();sendToGoogleSheets();
+  const t=T[curLang];
+
+  const bizVals=BIZ.map(b=>answers[b.id]||1);
+  const roleVals=ROLES.filter(b=>answers[b.id]!=='na').map(b=>answers[b.id]||1);
+  const all=[...bizVals,...roleVals];
+  const avg=(all.reduce((a,b)=>a+b,0)/all.length).toFixed(1);
+  document.getElementById('r-avg').textContent=`${t.rAvgPre} ${avg} ${t.rAvgSuf}`;
+
+  let meta=`<strong>${formData.name}</strong> · ${formData.role}<br>${formData.center}, ${formData.city} · ${formData.type}`;
+  if(formData.kidsA||formData.revA) meta+=`<br>📍 ${t.pointA}: ${formData.kidsA?formData.kidsA+' '+t.kids:''}${formData.revA?' · '+formData.revA:''}`;
+  if(formData.kidsB||formData.revB) meta+=`<br>🎯 ${t.pointB}: ${formData.kidsB?formData.kidsB+' '+t.kids:''}${formData.revB?' · '+formData.revB:''}`;
+  document.getElementById('r-meta').innerHTML=meta;
+
+  drawRadar();
+
+  document.getElementById('sg-biz').innerHTML=BIZ.map(b=>{
+    const v=answers[b.id]||1;
+    return`<div class="sc-row"><span class="sc-ico">${b.ico}</span><span class="sc-name">${blockName(b)}</span><span class="sc-val ${lc(v)}">${v}/5</span></div>`;
+  }).join('');
+
+  document.getElementById('sg-roles').innerHTML=ROLES.map(b=>{
+    const v=answers[b.id];
+    if(v==='na')return`<div class="sc-row"><span class="sc-ico">${b.ico}</span><span class="sc-name">${blockName(b)}</span><span class="sc-val na">${t.notApplicable}</span></div>`;
+    return`<div class="sc-row"><span class="sc-ico">${b.ico}</span><span class="sc-name">${blockName(b)}</span><span class="sc-val ${lc(v||1)}">${v||1}/5</span></div>`;
+  }).join('');
+
+  const bizMin=Math.min(...BIZ.map(b=>answers[b.id]||1));
+  const minB=BIZ.find(b=>(answers[b.id]||1)===bizMin);
+  // Реальное ключевое ограничение — минимум среди всех отвеченных блоков (бизнес)
+  document.getElementById('bn').innerHTML=
+    `<div class="bn-lbl">${t.bnLbl}</div>`+
+    `<div class="bn-name">${blockName(minB)} — ${bizMin}/5</div>`+
+    `<div class="bn-why">${t.bnWhy}</div>`+
+    `<div class="bn-sol">💡 <strong>${t.bnSolPre}</strong> ${blockSolve(minB)}</div>`;
+
+  // Все слабые зоны ≤3 — показываем платформенное решение по каждой
+  const weakBiz=BIZ.filter(b=>(answers[b.id]||1)<=3).sort((a,b)=>(answers[a.id]||1)-(answers[b.id]||1));
+  const activeRoles=ROLES.filter(b=>answers[b.id]!=='na');
+  const weakRoles=activeRoles.filter(b=>(answers[b.id]||1)<=3).sort((a,b)=>(answers[a.id]||1)-(answers[b.id]||1));
+  const allWeak=[...weakBiz,...weakRoles];
+
+  let th='';
+  if(allWeak.length===0){
+    // Все высокие — показать топ-3 как зоны роста
+    const topGrow=BIZ.sort((a,b)=>(answers[a.id]||1)-(answers[b.id]||1)).slice(0,3);
+    th+=`<div class="tasks-t">${t.tasksTitle}</div>`;
+    topGrow.forEach(b=>{
+      const v=answers[b.id]||1;
+      th+=`<div class="solution-card">
+        <div class="sol-head"><span class="sol-ico">${b.ico}</span><span class="sol-name">${blockName(b)}</span><span class="sol-badge sol-ok">${v}/5</span></div>
+        <div class="sol-ordo">🚀 ${blockSolve(b)}</div>
+      </div>`;
+    });
+  } else {
+    th+=`<div class="tasks-t">${t.tasksTitle}</div>`;
+    allWeak.slice(0,6).forEach(b=>{
+      const v=answers[b.id]||1;
+      const lvlClass=v<=1?'sol-red':v<=2?'sol-orange':'sol-yellow';
+      const hint=blockTip(b).replace(/<[^>]+>/g,''); // strip HTML tags for clean display
+      th+=`<div class="solution-card">
+        <div class="sol-head">
+          <span class="sol-ico">${b.ico}</span>
+          <span class="sol-name">${blockName(b)}</span>
+          <span class="sol-badge ${lvlClass}">${v}/5</span>
+        </div>
+        <div class="sol-ordo">🚀 ${blockSolve(b)}</div>
+        <div class="sol-steps">`;
+      blockTasks(b).forEach((task,i)=>{
+        th+=`<div class="sol-step"><span class="sol-num">${i+1}</span><span>${task}</span></div>`;
+      });
+      th+=`</div></div>`;
+    });
+  }
+  document.getElementById('tasks-wrap').innerHTML=th;
+
+  // Solve block
+  const weakIds=new Set(BIZ.filter(b=>(answers[b.id]||1)<=2).map(b=>b.id));
+  const lowBlocks=BLOCKS.filter(b=>answers[b.id]!=='na'&&(answers[b.id]||1)<=2&&blockSolve(b));
+  const solveItems=(lowBlocks.length>0?lowBlocks:BIZ.slice(0,4)).slice(0,6);
+  let sol=`<div class="ordo-solve-title">${t.solveTitle}</div><div class="ordo-feat-list">`;
+  solveItems.forEach(b=>{sol+=`<div class="ordo-feat"><span style="font-size:15px;flex-shrink:0">${b.ico}</span><span>${blockSolve(b)}</span></div>`;});
+  sol+=`</div>`;
+  document.getElementById('ordo-solve').innerHTML=sol;
+
+  // Features grid
+  const FEAT_IDS=[['cook'],['teacher','product'],['finance','ltv'],['ltv','teacher'],['product','teacher'],['service','ltv'],['legal','hr'],['management','marketing','sales']];
+  document.getElementById('feat-grid-result').innerHTML=t.featNames.map((name,i)=>{
+    const hot=FEAT_IDS[i].some(id=>weakIds.has(id));
+    return`<div class="feat${hot?' feat-hot':''}">\
+<span class="feat-ico">${['🍽️','🎮','💰','📓','📈','💬','📄','🤖'][i]}</span>${name}${hot?`<span class="feat-badge">${t.featHot}</span>`:''}</div>`;
+  }).join('');
+
+  // Cabinets
+  const CAB_WIDS=[['management','marketing','sales','finance'],['finance','ltv'],['sales','marketing'],['hr'],['teacher','product'],[],['service','ltv','product'],['teacher','product'],['nanny'],['cook'],['management','legal'],['sales','hr','ltv']];
+  document.getElementById('cab-list-result').innerHTML=t.cabNames.map((name,i)=>{
+    const hot=CAB_WIDS[i].some(id=>weakIds.has(id));
+    return`<span class="cab${hot?' highlight':''}">${name}${hot?' ✦':''}</span>`;
+  }).join('');
+}
+
+function drawRadar(){
+  const active=BLOCKS.filter(b=>answers[b.id]!=='na');
+  const n=active.length;const cx=130,cy=128,R=90;
+  const pt=(r,i)=>{const a=(i/n)*Math.PI*2-Math.PI/2;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];};
+  let h='';
+  [1,2,3,4,5].forEach(lv=>{const pts=active.map((_,i)=>pt(R*lv/5,i));h+=`<polygon points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#e8e6e0" stroke-width="0.8"/>`;});
+  active.forEach((b,i)=>{
+    const[x,y]=pt(R,i);h+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e8e6e0" stroke-width="0.8"/>`;
+    const[lx,ly]=pt(R+22,i);const anchor=lx<cx-5?'end':lx>cx+5?'start':'middle';
+    h+=`<text x="${lx}" y="${ly+4}" text-anchor="${anchor}" font-size="8.5" fill="#999" font-family="Inter,sans-serif">${blockName(b)}</text>`;
+  });
+  const bizA=active.filter(b=>b.sec==='biz');
+  const bizPts=bizA.map((b,i)=>{const v=answers[b.id]||1;return pt(R*(v/5),i);});
+  if(bizPts.length>2){h+=`<polygon points="${bizPts.map(p=>p.join(',')).join(' ')}" fill="#7CC348" fill-opacity=".2" stroke="#7CC348" stroke-width="2"/>`;bizPts.forEach(([x,y])=>{h+=`<circle cx="${x}" cy="${y}" r="3.5" fill="#7CC348"/>`;});}
+  const roleA=active.filter(b=>b.sec==='roles');
+  if(roleA.length){
+    const rPts=roleA.map((b,j)=>{const i=bizA.length+j;const v=answers[b.id]||1;return pt(R*(v/5),i);});
+    if(rPts.length>2){h+=`<polygon points="${rPts.map(p=>p.join(',')).join(' ')}" fill="#3B8BD4" fill-opacity=".2" stroke="#3B8BD4" stroke-width="2"/>`;rPts.forEach(([x,y])=>{h+=`<circle cx="${x}" cy="${y}" r="3.5" fill="#3B8BD4"/>`;});}
+    else rPts.forEach(([x,y])=>{h+=`<circle cx="${x}" cy="${y}" r="5" fill="#3B8BD4" fill-opacity=".6"/>`;});
+  }
+  h+=`<rect x="20" y="252" width="10" height="10" rx="2" fill="#7CC348" fill-opacity=".5"/><text x="34" y="261" font-size="9.5" fill="#888" font-family="Inter,sans-serif">${T[curLang].rlBiz}</text>`;
+  if(roleA.length)h+=`<rect x="162" y="252" width="10" height="10" rx="2" fill="#3B8BD4" fill-opacity=".5"/><text x="176" y="261" font-size="9.5" fill="#888" font-family="Inter,sans-serif">${T[curLang].rlRoles}</text>`;
+  document.getElementById('radar').innerHTML=h;
+}
+
+// ─── INTEGRATIONS ─────────────────────────────
+function buildTgText(){
+  const t=T[curLang];
+  const bizMin=Math.min(...BIZ.map(b=>answers[b.id]||1));
+  const minB=BIZ.find(b=>(answers[b.id]||1)===bizMin);
+  const bizVals=BIZ.map(b=>answers[b.id]||1);
+  const avg=(bizVals.reduce((a,b)=>a+b,0)/bizVals.length).toFixed(1);
+  let txt=`🎯 Новый лид — Ordo Диагностика [${curLang.toUpperCase()}]\n📅 ${new Date().toLocaleString('ru-RU')}\n\n`;
+  txt+=`👤 ${formData.name} · ${formData.role}\n🏫 ${formData.center}, ${formData.city}\n📋 ${formData.type}`;
+  if(formData.kidsA) txt+=` · ${formData.kidsA} ${t.kids}`;
+  if(formData.revA) txt+=` · ${formData.revA}`;
+  txt+='\n';
+  if(formData.revB||formData.kidsB){txt+=`🎯 ${t.pointB}: `;if(formData.kidsB)txt+=`${formData.kidsB} ${t.kids} `;if(formData.revB)txt+=`· ${formData.revB}`;txt+='\n';}
+  if(formData.source) txt+=`📡 ${t.source}: ${formData.source}\n`;
+  txt+=`\n⭐ Avg: ${avg}/5 | 🔴 ${t.bnLbl}: ${blockName(minB)} (${bizMin}/5)\n\n📊 `;
+  BIZ.forEach(b=>{const v=answers[b.id]||1;const bar=v<=1?'🔴':v<=2?'🟠':v<=3?'🟡':'🟢';txt+=`${bar}${blockName(b)}:${v} `;});
+  txt+=`\n👥 `;
+  ROLES.forEach(b=>{if(answers[b.id]==='na'){txt+=`⬜${blockName(b)}:N/A `;}else{const v=answers[b.id]||1;const bar=v<=1?'🔴':v<=2?'🟠':'🟢';txt+=`${bar}${blockName(b)}:${v} `;}});
+  txt+=`\n\n💬 ${formData.problems}`;
+  return txt;
+}
+
+// ─── SendPulse OAuth2 + Email ─────────────────
+async function getSPToken(){
+  try{
+    const r=await fetch('https://api.sendpulse.com/oauth/access_token',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({grant_type:'client_credentials',client_id:SP_API_KEY,client_secret:SP_API_SECRET})
+    });
+    const d=await r.json();
+    return d.access_token||null;
+  }catch(e){console.warn('SP token:',e);return null;}
+}
+
+async function sendEmailToClient(){
+  const token=await getSPToken();
+  if(!token)return;
+  const t=T[curLang];
+  const bizMin=Math.min(...BIZ.map(b=>answers[b.id]||1));
+  const minB=BIZ.find(b=>(answers[b.id]||1)===bizMin);
+  const weakBiz=BIZ.filter(b=>(answers[b.id]||1)<=3).sort((a,b)=>(answers[a.id]||1)-(answers[b.id]||1));
+
+  // Build score rows HTML
+  let scoresHtml=BIZ.map(b=>{
+    const v=answers[b.id]||1;
+    const col=v<=1?'#E24B4A':v<=2?'#EF9F27':v<=3?'#8a7000':'#4CAF50';
+    return `<tr><td style="padding:6px 12px;font-size:14px">${b.ico} ${blockName(b)}</td><td style="padding:6px 12px;font-weight:700;color:${col};font-size:14px">${v}/5</td></tr>`;
+  }).join('');
+
+  // Build solutions HTML
+  let solHtml=weakBiz.slice(0,4).map(b=>`
+    <div style="background:#f0f9e8;border-radius:8px;padding:12px 14px;margin-bottom:8px;border-left:3px solid #7CC348">
+      <div style="font-weight:600;font-size:13px;color:#1a1a18;margin-bottom:4px">${b.ico} ${blockName(b)} — ${answers[b.id]||1}/5</div>
+      <div style="font-size:13px;color:#2a5a0a">🚀 ${blockSolve(b)}</div>
+    </div>`).join('');
+
+  const html=`<!DOCTYPE html><html><body style="font-family:'Inter',Arial,sans-serif;background:#f5f5f3;margin:0;padding:24px">
+<div style="max-width:560px;margin:0 auto">
+  <div style="background:#7CC348;border-radius:12px 12px 0 0;padding:24px;text-align:center">
+    <div style="font-size:22px;font-weight:700;color:#fff">Ordo Education</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px">Результат диагностики</div>
+  </div>
+  <div style="background:#fff;padding:24px;border-radius:0 0 12px 12px">
+    <p style="font-size:15px;color:#333">Здравствуйте, <strong>${formData.name}</strong>!</p>
+    <p style="font-size:13px;color:#666;margin-bottom:16px">Вы прошли диагностику вашего центра <strong>${formData.center}</strong>. Вот ваши результаты:</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
+      <tr style="background:#f8f8f6"><th style="padding:8px 12px;text-align:left;font-size:12px;color:#999;font-weight:500">Блок</th><th style="padding:8px 12px;text-align:left;font-size:12px;color:#999;font-weight:500">Уровень</th></tr>
+      ${scoresHtml}
+    </table>
+    <div style="background:#fff5f5;border-radius:8px;padding:12px 14px;border-left:3px solid #E24B4A;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:#E24B4A;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Ключевое ограничение</div>
+      <div style="font-size:15px;font-weight:700;color:#1a1a18">${blockName(minB)} — ${bizMin}/5</div>
+    </div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px;color:#1a1a18">Как Ordo решает ваши проблемы:</div>
+    ${solHtml}
+    <div style="background:#7CC348;border-radius:12px;padding:20px;text-align:center;margin-top:20px">
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px">🎁 Ваш подарок</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.9);margin-bottom:14px">3 дня бесплатного доступа ко всем кабинетам Ordo</div>
+      <div style="background:#fff;border-radius:8px;padding:10px;display:inline-block;margin-bottom:14px">
+        <div style="font-size:11px;color:#888;margin-bottom:2px">Промокод</div>
+        <div style="font-size:22px;font-weight:700;color:#3a7a1a;letter-spacing:.1em">${DEMO_PROMO}</div>
+      </div>
+      <br>
+      <a href="${DEMO_URL}" style="display:inline-block;background:#fff;color:#3a7a1a;font-weight:700;font-size:15px;padding:12px 28px;border-radius:9px;text-decoration:none">Активировать демо →</a>
+    </div>
+    <p style="font-size:12px;color:#aaa;margin-top:16px;text-align:center">Если есть вопросы — напишите нам в Telegram или ответьте на это письмо.</p>
+  </div>
+</div></body></html>`;
+
+  try{
+    await fetch('https://api.sendpulse.com/smtp/emails',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({
+        email:{
+          html,
+          text:`Результат диагностики Ordo Education\n${formData.name}, ${formData.center}\nКлючевое ограничение: ${blockName(minB)} (${bizMin}/5)\nПромокод: ${DEMO_PROMO}\n${DEMO_URL}`,
+          subject:`🎁 Ваш результат диагностики + 3 дня Ordo бесплатно — ${formData.center}`,
+          from:{name:SP_FROM_NAME,email:SP_FROM_EMAIL},
+          to:[{name:formData.name,email:formData.email}]
+        }
+      })
+    });
+    console.log('Email sent to',formData.email);
+  }catch(e){console.warn('SP send:',e);}
+}
+
+function copyResult(){
+  const t=T[curLang];
+  const bizMin=Math.min(...BIZ.map(b=>answers[b.id]||1));
+  const minB=BIZ.find(b=>(answers[b.id]||1)===bizMin);
+  let txt=`${t.rTitle} — Ordo Education\n${new Date().toLocaleDateString('ru-RU')}\n\n`;
+  txt+=`${formData.name} · ${formData.role}\n${formData.center}, ${formData.city} · ${formData.type}\n`;
+  if(formData.phone) txt+=`📱 ${formData.phone}\n`;
+  if(formData.whatsapp) txt+=`💬 WA: ${formData.whatsapp}\n`;
+  if(formData.telegram) txt+=`✈️ TG: ${formData.telegram}\n`;
+  if(formData.kidsA||formData.revA) txt+=`${t.pointA}: ${formData.kidsA?formData.kidsA+' '+t.kids:''} ${formData.revA?'· '+formData.revA:''}\n`;
+  if(formData.kidsB||formData.revB) txt+=`${t.pointB}: ${formData.kidsB?formData.kidsB+' '+t.kids:''} ${formData.revB?'· '+formData.revB:''}\n`;
+  txt+=`\n${t.bizScores}:\n`;
+  BIZ.forEach(b=>{txt+=`${blockName(b)}: ${answers[b.id]||'—'}/5\n`;});
+  txt+=`\n${t.roleScores}:\n`;
+  ROLES.forEach(b=>{txt+=`${blockName(b)}: ${answers[b.id]==='na'?t.notApplicable:(answers[b.id]||'—')+'/5'}\n`;});
+  txt+=`\n${t.keyLimit}: ${blockName(minB)} (${bizMin}/5)\n\n${t.firstSteps}:\n`;
+  blockTasks(minB).forEach((task,i)=>{txt+=`${i+1}. ${task}\n`;});
+  txt+=`\n${t.demo}: https://ordo.education`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('bcopy');const old=b.textContent;
+    b.textContent=T[curLang].ctaCopied;setTimeout(()=>{b.textContent=old;},2000);
+  });
+}
+
+// ─── Google Sheets ────────────────────────────
+async function sendToGoogleSheets(){
+  if(!GOOGLE_SHEET_URL||GOOGLE_SHEET_URL==='ВСТАВЬТЕ_URL_APPS_SCRIPT') return;
+  const bizMin=Math.min(...BIZ.map(b=>answers[b.id]||1));
+  const minB=BIZ.find(b=>(answers[b.id]||1)===bizMin);
+  const bizVals=BIZ.map(b=>answers[b.id]||1);
+  const roleVals=ROLES.filter(b=>answers[b.id]!=='na').map(b=>answers[b.id]||1);
+  const all=[...bizVals,...roleVals];
+  const avg=(all.reduce((a,b)=>a+b,0)/all.length).toFixed(1);
+  const scores={};
+  BLOCKS.forEach(b=>{ scores[b.id]=answers[b.id]||''; });
+  const payload={
+    lang:curLang,name:formData.name||'',role:formData.role||'',
+    email:formData.email||'',phone:formData.phone||'',whatsapp:formData.whatsapp||'',
+    telegram:formData.telegram||'',center:formData.center||'',city:formData.city||'',
+    type:formData.type||'',kidsA:formData.kidsA||'',revA:formData.revA||'',
+    kidsB:formData.kidsB||'',revB:formData.revB||'',
+    problems:formData.problems||'',help:formData.help||'',source:formData.source||'',
+    scores,avgScore:avg,keyLimit:blockName(minB),keyLimitScore:bizMin,
+  };
+  try{
+    await fetch(GOOGLE_SHEET_URL,{
+      method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+    });
+  }catch(e){console.warn('Google Sheets error:',e);}
+}
+
+// Init
+setLang('ru');
+</script>
+</body>
+</html>
